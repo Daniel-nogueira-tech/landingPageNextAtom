@@ -1,0 +1,334 @@
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+    gap: 4rem;
+    z-index: 10;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(138, 43, 226, 0.1);
+    border: 1px solid var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--primary);
+    margin-bottom: 2rem;
+    margin-top: 3rem;
+}
+
+.hero-text h1 {
+    font-size: 4rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+}
+
+.hero-text p {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    max-width: 500px;
+}
+
+.hero-btns {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.btn-outline {
+    background: transparent;
+    color: white;
+    padding: 0.8rem 2rem;
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.btn-outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--text-muted);
+}
+
+/* Image / Graphics */
+.hero-image {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.main-sphere {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle at 50% 50%, var(--primary) 0%, transparent 90%);
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 0 100px var(--primary-glow);
+    animation: float 10s ease-in-out infinite;
+
+}
+
+.inner-sphere {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 98%;
+    height: 98%;
+    border: 1px solid var(--primary-glow);
+    border-radius: 50%;
+}
+
+.floating-card {
+    position: absolute;
+    padding: 1.5rem;
+    width: 180px;
+}
+
+.card-1 {
+    top: 10%;
+    right: -20%;
+    animation: float 4s ease-in-out infinite;
+}
+
+.card-2 {
+    bottom: 10%;
+    left: -20%;
+    animation: float 5s ease-in-out infinite reverse;
+}
+
+.floating-card h3 {
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+}
+
+.positive {
+    color: #00ff88;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Background Glow */
+.bg-glow {
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+    filter: blur(100px);
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/*Atom*/
+.atom {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.atom::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: inset 0 0 10px #bb72ff;
+    animation: float 10s ease-in-out infinite;
+    border-radius: 50%;
+}
+
+.particle {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: -5%;
+    left: 50%;
+    background: transparent;
+    box-shadow: inset 0 0 10px #bb72ff;
+    animation: float 6s ease-in-out infinite;
+    border-radius: 100%;
+}
+
+.orbit {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+    animation: float 6s ease-in-out infinite;
+}
+
+.orbit-1 {
+    --color: #d034ff;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border-bottom: 10px solid var(--color);
+    border-top: 10px solid var(--color);
+    filter: drop-shadow(0 0 10px var(--color));
+    animation: orbit 10s ease-in-out infinite;
+
+}
+
+.orbit-2 {
+    --color: #e17dff;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border-bottom: 10px solid var(--color);
+    border-top: 10px solid var(--color);
+    filter: drop-shadow(0 0 10px var(--color));
+    animation: orbit2 10s ease-in-out infinite;
+
+}
+
+.orbit-3 {
+    --color: #a60ed4fa;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border-bottom: 10px solid var(--color);
+    border-top: 10px solid var(--color);
+    filter: drop-shadow(0 0 10px var(--color));
+    animation: orbit3 10s ease-in-out infinite;
+
+}
+
+@keyframes orbit {
+    0% {
+        transform: rotateY(80deg) rotateZ(0deg);
+    }
+
+    100% {
+        transform: rotateY(80deg) rotateZ(360deg);
+    }
+}
+
+@keyframes orbit2 {
+    0% {
+        transform: rotateX(80deg) rotateY(25deg) rotateZ(0deg);
+    }
+
+    100% {
+        transform: rotateX(80deg) rotateY(25deg) rotateZ(360deg);
+    }
+}
+
+@keyframes orbit3 {
+    0% {
+        transform: rotateX(-80deg) rotateY(25deg) rotateZ(0deg);
+    }
+
+    100% {
+        transform: rotateX(-80deg) rotateY(25deg) rotateZ(360deg);
+    }
+}
+
+
+
+@media (max-width: 992px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 3rem;
+    }
+
+    .hero-text h1 {
+        font-size: 3rem;
+    }
+
+    .hero-text p {
+        margin: 0 auto 2.5rem;
+    }
+
+    .hero-btns {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .main-sphere {
+        width: 280px;
+        height: 280px;
+    }
+
+    .floating-card {
+        width: 140px;
+        padding: 1rem;
+    }
+
+    .card-1 {
+        right: -10%;
+    }
+
+    .card-2 {
+        left: -10%;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-text h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-btns {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-primary,
+    .btn-outline {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .main-sphere {
+        width: 220px;
+        height: 220px;
+    }
+
+    .card-1 {
+        top: 10%;
+        left: 60%;
+    }
+
+    .card-2 {
+        left: -20%;
+        bottom: -10%;
+
+    }
+}
