@@ -2,8 +2,10 @@ import React from 'react';
 import './Home.css';
 import { motion } from 'framer-motion';
 import { ChevronRight, TrendingUp } from 'lucide-react';
+import { PageContext } from '../../Contexts/PageContext';
 
 const Home = () => {
+    const { setIsLoginPopupOpen } = React.useContext(PageContext);
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -43,7 +45,7 @@ const Home = () => {
                         A plataforma mais segura e rápida para comprar, vender e gerenciar seus ativos digitais. Comece hoje mesmo sua jornada no mundo cripto.
                     </motion.p>
                     <motion.div variants={itemVariants} className="hero-btns">
-                        <button className="btn-primary">Criar Conta Grátis</button>
+                        <button onClick={() => setIsLoginPopupOpen(true)} className="btn-primary">Criar Conta Grátis</button>
                         <button className="btn-outline">
                             Ver Gráficos <ChevronRight size={18} />
                         </button>

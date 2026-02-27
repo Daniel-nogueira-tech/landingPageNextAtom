@@ -25,7 +25,6 @@ const Learn = () => {
             title: "Ecossistema DeFi",
             desc: "Explore o mundo das finanças descentralizadas e como obter rendimentos passivos."
         }
-
     ];
 
     return (

@@ -6,11 +6,11 @@ import { User, X } from 'lucide-react'
 import { Password } from 'primereact/password';
 import 'primereact/resources/themes/lara-dark-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
-
 import { Messages } from 'primereact/messages';
 import { useRef } from 'react';
-
-
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Toast } from 'primereact/toast';
 
 
 
@@ -20,9 +20,9 @@ import { useRef } from 'react';
 
 
 const LoginPopup = () => {
-    const { setIsLoginPopupOpen } = React.useContext(PageContext);
-
+    const { setIsLoginPopupOpen, backendUrl, setIsLoading, getUserData, setIsLogin } = React.useContext(PageContext);
     const messages = useRef(null);
+
 
     const [valueConfirm, setValueConfirm] = useState('');
     const [currernState, setCurrenState] = useState("Login")
@@ -32,7 +32,11 @@ const LoginPopup = () => {
         password: ""
     });
 
-    console.log(value);
+    const toast = useRef(null);
+
+
+
+
 
     const onChangeHandler = (e) => {
         const name = e.target.name;
@@ -42,6 +46,8 @@ const LoginPopup = () => {
 
     const onSubmitLogin = async (event) => {
         event.preventDefault();
+        axios.defaults.withCredentials = true;
+
         if (currernState === "Sing up" && value.password !== valueConfirm) {
             messages.current.show({
                 severity: 'warn',
@@ -51,12 +57,72 @@ const LoginPopup = () => {
             });
             return;
         }
-        window.location.reload();
+        try {
+            const response = await axios.post(
+                `${backendUrl}/api/auth/${currernState === "Sing up" ? "register" : "login"}`,
+                {
+                    name: value.name,
+                    email: value.email,
+                    password: value.password
+                }
+            );
+
+            const data = response.data;
+
+
+            if (data.success) {
+                toast.current.show({
+                    severity: 'success',
+                    summary: 'success',
+                    detail: data.message || 'Operação realizada com sucesso!',
+                    life: 3000
+                });
+            };
+
+            setIsLogin(true);
+            getUserData();
+            setTimeout(() => {
+                setIsLoginPopupOpen(false);
+            }, 1000);
+
+        } catch (error) {
+            if (error.response) {
+                // Erro vindo do backend (400, 401, 500...)
+                const status = error.response.status;
+                const message = error.response.data?.message;
+
+                if (status === 400) {
+                    toast.current.show({
+                        severity: 'warn',
+                        summary: 'Warn',
+                        detail: message || 'Dados inválidos.',
+                        life: 4000
+                    });
+
+                } else {
+                    toast.current.show({
+                        severity: 'error',
+                        summary: 'error',
+                        detail: message || 'Erro no servidor.',
+                        life: 4000
+                    });
+                }
+
+            } else {
+                // Erro de rede (backend offline, CORS, etc.)
+                toast.current.show({
+                    severity: 'error',
+                    summary: 'Erro de conexão',
+                    detail: 'Não foi possível conectar ao servidor.',
+                    life: 4000
+                });
+            }
+        }
     }
 
     return (
         <div className='login-popup'>
-
+            <Toast ref={toast} position="top-left" />
             <form onSubmit={onSubmitLogin} className="login-popup-container">
                 <div className="login-popup-title">
                     <h2>
@@ -135,14 +201,22 @@ const LoginPopup = () => {
                     className='btn-primary btn-login'
                     type="submit">{currernState === "Sing up" ? "Create account" : "Login"}
                 </button>
+
                 <div className="login-popup-condition">
                     <input type="checkbox" required />
                     <p>Concorda com os termos e condições?</p>
                 </div>
-                {currernState === "Login"
-                    ? <p>Não tem uma conta? <span onClick={() => setCurrenState("Sing up")}>Registre-se</span></p>
-                    : <p>Já possui uma conta? <span onClick={() => setCurrenState("Login")}>Faça login</span></p>
-                }
+                <div className='login-popup-texts'>
+                    {currernState === "Login"
+                        ? <p>Não tem uma conta? <span onClick={() => setCurrenState("Sing up")}>Registre-se</span></p>
+                        : <p>Já possui uma conta? <span onClick={() => setCurrenState("Login")}>Faça login</span></p>
+                    }
+                    {currernState === "Login" && <p className='text-ResetPassword'>Esqueceu sua senha?
+                        <Link to="/reset-password">
+                            <span>Click aqui</span>
+                        </Link>
+                    </p>}
+                </div>
             </form>
 
 

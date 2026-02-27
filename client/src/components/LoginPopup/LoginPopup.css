@@ -42,13 +42,19 @@
     background: var(--login-background);
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 15px;
     padding: 25px 30px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     animation: fadeIn 0.5s;
     align-items: center;
+}
+
+.login-popup-texts {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .p-inputtext,
@@ -84,7 +90,7 @@
 }
 
 .login-popup-container p span {
-    color: #ff5555;
+    color: #c300ffb6;
     cursor: pointer;
     font-weight: 500;
 }
@@ -98,4 +104,76 @@
 .p-message .p-message-icon.p-icon {
     margin-left: 10px;
     width: 18px;
+}
+
+.text-ResetPassword {
+    text-align: end;
+    font-size: 10px;
+    font-weight: 500;
+    gap: 5px;
+    display: flex;
+    margin-right: 70px;
+}
+
+.text-ResetPassword {
+    cursor: pointer;
+}
+
+/*================================
+                Toast
+==================================*/
+
+
+.p-toast .p-toast-message .p-toast-message-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90px;
+    border-radius: 10px;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-icon.p-icon {
+    margin-left: 10px;
+    width: 25px;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-detail {
+    display: flex;
+    align-items: center;
+    font-weight: 200;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-summary {
+    font-weight: 800;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-text {
+    display: flex;
+    flex-direction: column;
+    margin-left: 25px;
+}
+
+.p-toast .p-toast-message.p-toast-message-error {
+    background: rgba(255, 0, 0, 0.03);
+
+}
+
+.p-toast .p-toast-message.p-toast-message-success {
+    background: rgba(0, 192, 42, 0.03);
+}
+
+.p-toast .p-toast-message.p-toast-message-warn {
+    background: rgba(255, 196, 0, 0.03);
+}
+
+/*================================
+           Toast Warn 
+==================================*/
+
+.p-message.p-message-warn {
+    margin-top: 5px;
+}
+
+.p-message-wrapper {
+    justify-content: space-between;
 }

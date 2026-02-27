@@ -7,6 +7,9 @@ import News from './components/News/News';
 import Footer from './components/Footer/Footer';
 import { PageContext } from './Contexts/PageContext';
 import LoginPopup from './components/LoginPopup/LoginPopup';
+import { Routes, Route } from 'react-router-dom';
+import ResetPassword from './components/ResetPassword/ResetPassword';
+import EmailVerify from './components/EmailVerify/EmailVerify';
 
 function App() {
   const { isLoginPopupOpen } = React.useContext(PageContext);
@@ -18,6 +21,10 @@ function App() {
       <div className="App">
         <Navbar />
         <main>
+          <Routes>
+            <Route path='/reset-password' element={<ResetPassword />} />
+            <Route path='/email-verify' element={<EmailVerify />} />
+          </Routes>
           <Home />
           <Learn />
           <Download />
