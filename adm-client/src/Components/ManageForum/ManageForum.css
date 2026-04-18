@@ -1,0 +1,326 @@
+.mf-header {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.mf-header h2 {
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.mf-highlight {
+    background: linear-gradient(135deg, #8a2be2 0%, #bc13fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+}
+
+.mf-header p {
+    color: #a1a1aa;
+    margin-top: 0.5rem;
+}
+
+.mf-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+/* Glassmorphism Card Base */
+.mf-card {
+    background: rgba(30, 30, 40, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.6s ease forwards;
+    animation-delay: 0.5s;
+}
+
+/* Status Borders */
+.active-post {
+    border-left: 4px solid #10b981;
+    /* Emerald green */
+}
+
+.hidden-post {
+    border-left: 4px solid #f59e0b;
+    /* Amber/Yellow */
+
+}
+
+.mf-card-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    cursor: pointer;
+}
+
+.mf-card-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.mf-card-summary:hover .mf-card-info h3 {
+    color: #bc13fe;
+}
+
+.mf-card-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: #a1a1aa;
+    align-items: center;
+}
+
+.mf-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.badge-emerald {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.badge-amber {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+.mf-invisible-warning {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+/* Core Buttons */
+.mf-card-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.mf-btn-icon {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e4e4e7;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mf-btn-icon:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.mf-delete {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.mf-delete:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.4);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+    /* Red neon glow */
+}
+
+/* Expanded section */
+.mf-card-details {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mf-post-content.glass-inset {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.2rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.mf-post-content h4,
+.mf-comments-section h4 {
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+    color: #bc13fe;
+    font-weight: 700;
+}
+
+
+
+.mf-post-content p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Comments */
+.mf-comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.mf-comment-item {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 1rem;
+}
+
+.mf-comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+}
+
+.mf-comment-author {
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mf-comment-author p {
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
+.mf-comment-item p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #d4d4d8;
+    text-align: justify;
+}
+
+/* Admin Comment highlighting */
+.admin-comment {
+    border: 1px solid rgba(188, 19, 254, 0.4);
+    background: rgba(138, 43, 226, 0.05);
+}
+
+.admin-badge {
+    background: linear-gradient(135deg, #d4af37, #f3e5ab);
+    /* Gold */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.admin-badge svg {
+    color: #d4af37;
+}
+
+.text-muted {
+    color: #a1a1aa;
+    font-size: 0.9rem;
+}
+
+/* Reply Input Box */
+.mf-reply-box {
+    margin-top: 1rem;
+}
+
+.mf-reply-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #09090b;
+    /* Deep dark background */
+    border-radius: 10px;
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    transition: box-shadow 0.3s ease;
+}
+
+.mf-reply-input-wrapper:focus-within {
+    box-shadow: 0 0 15px rgba(188, 19, 254, 0.5);
+    /* Sombra roxa vibrante */
+    border-color: #bc13fe;
+}
+
+.mf-input-icon {
+    position: absolute;
+    left: 12px;
+}
+
+.admin-color {
+    color: #bc13fe;
+}
+
+.mf-reply-input-wrapper input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 1rem 3rem 1rem 2.8rem;
+    color: white;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.mf-reply-input-wrapper input::placeholder {
+    color: #71717a;
+}
+
+.mf-send-reply {
+    position: absolute;
+    right: 8px;
+    background: linear-gradient(135deg, #8a2be2 0%, #bc13fe 100%);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.mf-send-reply:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .mf-card-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .mf-card-controls {
+        align-self: flex-end;
+    }
+}

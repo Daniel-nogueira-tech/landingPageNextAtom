@@ -1,0 +1,145 @@
+.noticia-aberta {
+    min-height: 100vh;
+    padding-top: 120px;
+    padding-bottom: 60px;
+}
+
+.noticia-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.noticia-content {
+    padding: 3rem;
+}
+
+.noticia-content h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.list-meta {
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+.noticia-media {
+    width: 100%;
+    height: 350px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.noticia-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.noticia-body {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-main);
+}
+
+.noticia-body p {
+    margin-bottom: 1.5rem;
+}
+
+.noticia-body blockquote {
+    padding: 1.5rem;
+    margin: 2rem 0;
+    background: rgba(138, 43, 226, 0.05);
+    border-left: 4px solid var(--primary);
+    font-size: 1.2rem;
+    font-style: italic;
+    color: white;
+}
+
+.related-glass {
+    padding: 2rem;
+    position: sticky;
+    top: 100px;
+}
+
+.related-glass h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    color: white;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 0.5rem;
+}
+
+.related-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.related-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.related-item:hover .related-text h4 {
+    color: var(--primary);
+}
+
+.related-img {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.related-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.related-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.related-text h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 0.3rem;
+    color: var(--text-main);
+    transition: var(--transition);
+}
+
+.related-text span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+@media (max-width: 992px) {
+    .noticia-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .noticia-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .noticia-content h1 {
+        font-size: 2rem;
+    }
+
+    .noticia-media {
+        height: 250px;
+    }
+}

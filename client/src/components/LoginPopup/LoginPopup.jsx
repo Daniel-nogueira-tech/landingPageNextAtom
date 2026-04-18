@@ -145,54 +145,46 @@ const LoginPopup = () => {
                                 onChange={onChangeHandler}
                                 name='password'
                                 value={value.password}
-                                promptLabel="Digite uma senha"
-                                weakLabel="Fraca"
-                                mediumLabel="Média"
-                                strongLabel="Forte"
                                 placeholder='Password'
+                                feedback={false}
                                 toggleMask
                             />
                         </>
                     )}
                     {currernState === "Sing up" && (
                         <>
-                            <input
-                                type="text"
-                                placeholder='Username'
-                                name='name'
-                                onChange={onChangeHandler}
-                                value={value.name}
-                                required />
-                            <input
-                                type="text"
-                                placeholder='Email'
-                                name='email'
-                                onChange={onChangeHandler}
-                                value={value.email}
-                                required />
-                            <Password
-                                value={value.password}
-                                onChange={onChangeHandler}
-                                name='password'
-                                promptLabel="Digite uma senha"
-                                weakLabel="Fraca"
-                                mediumLabel="Média"
-                                strongLabel="Forte"
-                                placeholder='Password'
-                                toggleMask
-                            />
-                            <Password
-                                value={valueConfirm}
-                                onChange={(e) => setValueConfirm(e.target.value)}
-                                name='confirmPassword'
-                                promptLabel="Digite uma senha"
-                                weakLabel="Fraca"
-                                mediumLabel="Média"
-                                strongLabel="Forte"
-                                placeholder='ConfirmPassword'
-                                toggleMask
-                            />
-                            <Messages ref={messages} />
+                            <div className="login-popup-inputs-singup" >
+                                <input
+                                    type="text"
+                                    placeholder='Username'
+                                    name='name'
+                                    onChange={onChangeHandler}
+                                    value={value.name}
+                                    required />
+                                <input
+                                    type="text"
+                                    placeholder='Email'
+                                    name='email'
+                                    onChange={onChangeHandler}
+                                    value={value.email}
+                                    required />
+                                <Password
+                                    style={{ width: "100%" }}
+                                    value={value.password}
+                                    onChange={onChangeHandler}
+                                    name='password'
+                                    placeholder='Password'
+                                    toggleMask
+                                />
+                                <Password
+                                    value={valueConfirm}
+                                    onChange={(e) => setValueConfirm(e.target.value)}
+                                    name='confirmPassword'
+                                    placeholder='ConfirmPassword'
+                                    toggleMask
+                                />
+                                <Messages ref={messages} />
+                            </div>
                         </>
 
                     )}

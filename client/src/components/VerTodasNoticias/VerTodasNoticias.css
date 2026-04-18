@@ -1,0 +1,29 @@
+.ver-todas-noticias {
+    min-height: 100vh;
+    padding-top: 120px;
+    padding-bottom: 60px;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.page-info {
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.btn-primary.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+    box-shadow: none;
+}
+
+.btn-primary.disabled:hover {
+    transform: none;
+}

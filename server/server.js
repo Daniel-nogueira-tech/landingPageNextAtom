@@ -6,12 +6,14 @@ import cookieParser from "cookie-parser";
 import authRoute from "./routes/authRoutes.js";
 import dns from 'dns';
 import userRoute from "./routes/userRoutes.js";
-
+import learningContentRoutes from "./routes/LearningContentRoutes.js";
+import newsContentRoutes from "./routes/newsContentRoutes.js";
+import forumRoutes from "./routes/forumRoutes.js";
 
 dotenv.config();
 
 dns.setServers(['8.8.8.8', '1.1.1.1']);
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
 
 // app config
 const app = express();
@@ -33,6 +35,9 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
+app.use("/api/learning-content", learningContentRoutes);
+app.use("/api/news-content", newsContentRoutes);
+app.use("/api/forum", forumRoutes);
 
 app.listen(port, () => {
     console.log(`Server running on port http://localhost:${port}`);

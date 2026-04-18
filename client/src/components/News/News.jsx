@@ -2,31 +2,12 @@ import React from 'react';
 import './News.css';
 import { motion } from 'framer-motion';
 import { Calendar, User, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { newsData } from '../../data';
 
 const News = () => {
-    const news = [
-        {
-            image: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=500&auto=format&fit=crop&q=60",
-            category: "Mercado",
-            title: "Bitcoin ultrapassa marca Histórica de $100k",
-            date: "02 Fev, 2026",
-            author: "Admin"
-        },
-        {
-            image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=500&auto=format&fit=crop&q=60",
-            category: "Segurança",
-            title: "Como proteger seus NFTs de ataques Phishing",
-            date: "01 Fev, 2026",
-            author: "Tech Team"
-        },
-        {
-            image: "https://images.unsplash.com/photo-1639762681057-408e52192e55?w=500&auto=format&fit=crop&q=60",
-            category: "Regulação",
-            title: "Novas leis para Criptoativos na América Latina",
-            date: "30 Jan, 2026",
-            author: "Legal"
-        }
-    ];
+    // Pegar apenas as 3 notícias mais recentes (ou destaques)
+    const news = newsData.slice(0, 3);
 
     return (
         <section id="news" className="news">
@@ -53,7 +34,7 @@ const News = () => {
                 <div className="news-grid">
                     {news.map((item, index) => (
                         <motion.div
-                            key={index}
+                            key={item.slug}
                             className="news-card glass"
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -71,16 +52,16 @@ const News = () => {
                                     <span><User size={14} /> {item.author}</span>
                                 </div>
                                 <h3>{item.title}</h3>
-                                <a href="#" className="read-more">
+                                <Link to={`/noticias/${item.slug}`} className="read-more">
                                     Ler Notícia <ArrowRight size={16} />
-                                </a>
+                                </Link>
                             </div>
                         </motion.div>
                     ))}
                 </div>
 
                 <div className="news-cta">
-                    <button className="btn-outline">Ver Todas as Notícias</button>
+                    <Link to="/noticias" className="btn-outline">Ver Todas as Notícias</Link>
                 </div>
             </div>
         </section>

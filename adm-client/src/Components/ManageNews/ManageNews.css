@@ -1,0 +1,178 @@
+/* Container Override Override */
+.news-list-container {
+    padding: 32px;
+    margin-top: 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Segura o estilo de dashboard */
+}
+
+/* Forçando o dark mode na listagem */
+.news-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Horizontal Line Row */
+.news-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: transparent;
+    border: 1px solid rgba(157, 78, 221, 0.25);
+    /* Separador sutil em roxo escuro */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.news-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+/* Efeito de hover - Brilho roxo */
+.news-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+    box-shadow: 0 0 20px rgba(116, 0, 184, 0.1);
+    /* Leve brilho roxo nas bordas */
+    border-color: rgba(116, 0, 184, 0.6);
+    transform: scale(1.015);
+    /* Leve aumento/salto */
+    z-index: 10;
+}
+
+/* Informações da Notícia (Minuatura e Textos) */
+.news-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.news-thumbnail {
+    width: 110px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeInUp 0.6s ease forwards;
+    animation-delay: 0.4s;
+}
+
+.news-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+.news-category {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #9d4edd;
+    /* Roxo */
+    font-weight: 700;
+}
+
+.news-details h3 {
+    margin: 0 0 0 10px;
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: 600;
+}
+
+.news-meta {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Botões de Ação na Lista */
+.news-actions {
+    display: flex;
+    gap: 14px;
+}
+
+.news-actions button {
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.15rem;
+    transition: all 0.3s ease;
+}
+
+/* Botão Vermelho Neon (Remover) */
+.delete-btn-neon {
+    background: rgba(255, 0, 85, 0.08);
+    /* Vermelho Vivo base escuro */
+    color: #ff0055;
+    box-shadow: 0 0 5px rgba(255, 0, 85, 0.1);
+}
+
+.delete-btn-neon:hover {
+    background: rgba(255, 0, 85, 0.2);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.6);
+    /* Efeito Neon Brilhante */
+    transform: translateY(-2px);
+}
+
+/* Re-aproveitando Botão Editar */
+.edit-btn {
+    background: rgba(72, 191, 227, 0.1);
+    color: #48bfe3;
+}
+
+.edit-btn:hover {
+    background: rgba(72, 191, 227, 0.25);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(72, 191, 227, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Textarea Largo Específico para Edição de Notícia */
+.large-textarea {
+    resize: vertical;
+    min-height: 150px;
+    /* Bem mais espaço que o normal */
+    line-height: 1.6;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.large-textarea:focus {
+    outline: none;
+    border-color: #9d4edd;
+    box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.2);
+}
+
+/* Fallback general empty list view */
+.empty-message {
+    color: #a0a0a0;
+    text-align: center;
+    padding: 30px;
+    font-size: 1.1rem;
+}
+
+
+
+/* 
+Nós dependemos de regras de .modal-overlay, .glassmorphism-deep etc, do escopo global / cascata do React/Dashboard.
+Sendo assim, eu irei garantir que elas funcionem mantendo a mesma sintaxe HTML.
+*/

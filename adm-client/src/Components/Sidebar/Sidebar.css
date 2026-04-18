@@ -1,0 +1,128 @@
+/* Sidebar */
+.admin-sidebar {
+    position: sticky;
+    top: 0;
+    height: 92vh;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0;
+}
+
+.sidebar-brand h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 40px 0;
+    color: #fff;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar-brand h2 span {
+    color: #9d4edd;
+}
+
+.sidebar-brand img {
+    border-radius: 50%;
+}
+
+.sidebar-brand img {
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+
+.sidebar-nav {
+    flex-grow: 1;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #a0a0a0;
+}
+
+.nav-item .nav-icon {
+    font-size: 1.2rem;
+    margin-right: 12px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.nav-item.active {
+    border-left: 4px solid #7400b8;
+}
+
+.text-danger {
+    color: #ff4d4d !important;
+}
+
+.text-danger:hover {
+    background: rgba(255, 77, 77, 0.1) !important;
+}
+
+.sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.active {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border-left: 4px solid #7400b8;
+    border-radius: 12px;
+}
+
+.nav-item.active .nav-icon {
+    color: #fff;
+}
+
+.action-btn {
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.6rem;
+}
+
+.sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}

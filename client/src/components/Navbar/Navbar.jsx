@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PageContext } from '../../Contexts/PageContext';
 import axios from 'axios';
 import { Toast } from 'primereact/toast';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, Link } from 'react-router-dom';
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -14,7 +13,19 @@ const Navbar = () => {
     const toast = useRef(null);
     const navigate = useNavigate();
 
-    console.log("isAccountVerified :", userData?.userData?.isAccountVerified);
+
+    function getLastTwoNames(fullName) {
+        if (!fullName || typeof fullName !== "string") return "";
+
+        const parts = fullName.trim().split(/\s+/);
+
+        if (parts.length <= 2) {
+            return parts.join(" ");
+        }
+        return parts.slice(2).join(" ");
+    }
+    const lastTwoNames = getLastTwoNames(userData?.userData?.name)
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -66,17 +77,21 @@ const Navbar = () => {
         <nav className={`navbar ${scrolled ? 'scrolled glass' : ''}`}>
             <Toast ref={toast} position="top-left" />
             <div className="container nav-content">
-                <div className="logo">
-                    <Atom className="logo-icon" size={28} />
-                    <span>Next<span className="text-gradient">Atom</span></span>
-                </div>
+                <Link to="/">
+                    <div className="logo">
+                        <img src="/favicon.ico" alt="" style={{ width: '40px', height: '40px' }} />
+                        <span>Next<span className="text-gradient">Atom</span></span>
+                    </div>
+                </Link>
 
                 <div className="desktop-menu">
                     <ul className="nav-links">
-                        <li><a href="#home">Home</a></li>
+                        <li><Link to="/">Home</Link></li>
                         <li><a href="#learn">Aprender</a></li>
                         <li><a href="#download">Download</a></li>
                         <li><a href="#news">Notícias</a></li>
+                        <li><Link to="/forum">Fórum</Link></li>
+                        <li><Link to="/planos">Planos</Link></li>
                     </ul>
 
                     {userData ? (
@@ -84,7 +99,7 @@ const Navbar = () => {
                             <span className='check-email'>{userData?.userData?.isAccountVerified ? <Check /> : <OctagonAlert className='alert-verify-email' />}</span>
                             <div className="btn-primary" id='user-profile' >
 
-                                <span> <UserRound size={28} /> <p>{userData?.userData?.name || ""}</p></span>
+                                <span> <UserRound size={28} /> <p>{lastTwoNames || ""}</p></span>
                                 {/**Menu dropdown */}
                                 <ul className='user-profile-dropdown'>
                                     <li><UserRound size={28} />Perfil</li>
@@ -120,6 +135,9 @@ const Navbar = () => {
                             <li><a href="#learn" onClick={() => setIsOpen(false)}>Aprender</a></li>
                             <li><a href="#download" onClick={() => setIsOpen(false)}>Download</a></li>
                             <li><a href="#news" onClick={() => setIsOpen(false)}>Notícias</a></li>
+                            <li><Link to="/forum" onClick={() => setIsOpen(false)}>Fórum</Link></li>
+                            <li><Link to="/planos" onClick={() => setIsOpen(false)}>Planos</Link></li>
+
                             <li>
                                 {userData ? (
                                     <>

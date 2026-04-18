@@ -11,7 +11,7 @@
   --glass-border: rgba(255, 255, 255, 0.1);
   --gradient-purple: linear-gradient(135deg, #8a2be2 0%, #bc13fe 100%);
   --transition: all 0.3s ease;
-  --login-background: radial-gradient(circle, #0e001411, #1a0825);
+  --login-background: radial-gradient(circle, #242424, #000000);
 
 }
 

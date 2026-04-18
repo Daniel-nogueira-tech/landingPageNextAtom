@@ -9,7 +9,7 @@ const Footer = () => {
                 <div className="footer-top">
                     <div className="footer-brand">
                         <div className="logo">
-                            <Rocket className="logo-icon" size={28} />
+                            <img src="/favicon.ico" alt="" style={{ width: '40px', height: '40px' }} />
                             <span>Next<span className="text-gradient">Atom</span></span>
                         </div>
                         <p>Sua ponte para o futuro financeiro descentralizado. Segurança, velocidade e transparência em um só lugar.</p>

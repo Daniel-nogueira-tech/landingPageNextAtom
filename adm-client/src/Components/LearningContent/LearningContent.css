@@ -1,0 +1,275 @@
+/* Container List Overview */
+.content-list-container {
+    padding: 32px;
+    margin-top: 20px;
+}
+
+.content-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* List Item (Card) */
+.content-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    background: rgba(255, 255, 255, 0.02);
+    /* Borda fina em roxo degradê percebido atravéz da opacidade */
+    border: 1px solid rgba(157, 78, 221, 0.25);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.6s ease forwards;
+    animation-delay: 0.3s;
+}
+
+.card-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 10%;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease forwards;
+    animation-delay: 0.4s;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.content-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(157, 78, 221, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(116, 0, 184, 0.1);
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.card-info h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: #fff;
+    font-weight: 600;
+}
+
+.card-id {
+    font-size: 0.85rem;
+    color: #9d4edd;
+}
+
+/* Action Buttons */
+.card-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.card-actions button {
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+}
+
+/* Botão Editar */
+.edit-btn {
+    background: rgba(72, 191, 227, 0.1);
+    color: #48bfe3;
+}
+
+.edit-btn:hover {
+    background: rgba(72, 191, 227, 0.25);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(72, 191, 227, 0.3);
+}
+
+/* Botão Deletar (Vermelho sóbrio) */
+.delete-btn {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.delete-btn:hover {
+    background: rgba(220, 53, 69, 0.25);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(220, 53, 69, 0.3);
+}
+
+.empty-message {
+    color: #a0a0a0;
+    text-align: center;
+    padding: 30px;
+    font-size: 1.1rem;
+}
+
+/* ===========================
+   Modal (Popup) Overlay
+   =========================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    /* Fundo escuro semi-transparente com backdrop blur */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Modal Content (Glassmorphism Profundo) */
+.glassmorphism-deep {
+    /* Fundo #1a1a1a com transparência */
+    background: rgba(26, 26, 26, 0.85);
+    border: 1px solid rgba(157, 78, 221, 0.3);
+    border-radius: 16px;
+    padding: 32px;
+    width: 90%;
+    max-width: 650px;
+    /* Sombras roxas suaves */
+    box-shadow: 0 10px 40px rgba(116, 0, 184, 0.25);
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* Header Modal */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 16px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #a0a0a0;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #ff4d4d;
+}
+
+/* Form Styles */
+.modal-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group.full-width {
+    grid-column: span 2;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    color: #c0c0c0;
+    font-weight: 500;
+}
+
+.input-group input,
+.input-group textarea {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 12px 14px;
+    /* Bordas arredondadas */
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.input-group input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* Brilham ao focar */
+.input-group input:focus,
+.input-group textarea:focus {
+    outline: none;
+    border-color: #9d4edd;
+    box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.2);
+}
+
+.input-group textarea {
+    resize: vertical;
+}
+
+/* Modal Footer */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Botão Cancelar */
+.cancel-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Botão Salvar (Usa o degradê se a classe global estiver aplicada, ou herda as regras) */
+.save-btn {
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    color: white;
+}

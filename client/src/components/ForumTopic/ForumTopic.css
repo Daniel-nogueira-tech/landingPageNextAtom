@@ -1,0 +1,242 @@
+.forum-topic-page {
+    min-height: 100vh;
+    padding-top: 120px;
+    padding-bottom: 80px;
+}
+
+.topic-main-container {
+    padding: 3rem;
+    margin-bottom: 2rem;
+}
+
+.topic-header-meta {
+    margin-bottom: 1.5rem;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.author-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--gradient-purple);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    border: 2px solid var(--primary);
+}
+
+.small-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+}
+
+.author-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: white;
+}
+
+.topic-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.category-tag {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.topic-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+}
+
+.topic-body {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--text-main);
+    margin-bottom: 2rem;
+}
+
+.topic-body p {
+    margin-bottom: 1.5rem;
+}
+
+.topic-image {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 2rem 0;
+    border: 1px solid var(--glass-border);
+}
+
+.topic-image img {
+    width: 100%;
+    max-width: 600px;
+    max-height: 400px;
+    display: block;
+}
+
+.topic-tags {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+.topic-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.vote-group {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+.vote-count {
+    font-weight: 700;
+    color: white;
+}
+
+.action-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.icon-btn:hover {
+    color: var(--primary);
+}
+
+.small-btn {
+    font-size: 0.8rem;
+}
+
+/* Comments Section */
+.comments-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid var(--primary);
+}
+
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.comment-card {
+    padding: 1.5rem;
+    border-left: 2px solid transparent;
+    transition: var(--transition);
+    /* simulate cascade layout */
+    margin-left: 2rem;
+}
+
+.comment-card:hover {
+    border-left-color: var(--primary);
+}
+
+.comment-author {
+    margin-bottom: 1rem;
+}
+
+.comment-body {
+    color: var(--text-main);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.reply-form {
+    padding: 2rem;
+}
+
+.reply-form h4 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.reply-form textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    padding: 1rem;
+    border-radius: 10px;
+    color: white;
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    transition: var(--transition);
+    margin-bottom: 1rem;
+}
+
+.reply-form textarea:focus {
+    border-color: var(--primary);
+}
+
+.reply-form-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+    .topic-main-container {
+        padding: 2rem 1.5rem;
+    }
+
+    .topic-title {
+        font-size: 1.8rem;
+    }
+
+    .topic-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.5rem;
+    }
+
+    .comment-card {
+        margin-left: 0;
+    }
+}
