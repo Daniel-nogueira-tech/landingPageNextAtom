@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
     resetOtp: { type: String, default: "" },
     resetOtpExpireAt: { type: Number, default: 0 },
     cartData: { type: Object, default: {} },
+    plan: { type: String, enum: ["free", "pro", "premium"], default: "free" },
 }, { timestamps: true });
 
 

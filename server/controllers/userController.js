@@ -1,5 +1,6 @@
 import userModels from "../models/userModels.js";
 
+//get user data
 const getUserData = async (req, res) => {
     try {
         const userId = req.userId;
@@ -20,4 +21,8 @@ const getUserData = async (req, res) => {
     }
 };
 
-export default getUserData;
+
+
+
+
+export { getUserData };

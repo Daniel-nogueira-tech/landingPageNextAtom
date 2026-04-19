@@ -7,6 +7,7 @@ import LearningAdd from './Components/LearningAdd/LearningAdd'
 import AddNews from './Components/AddNews/AddNews'
 import ManageForum from './Components/ManageForum/ManageForum'
 import ManageUsers from './Components/ManageUser/ManageUsers'
+import LoginPage from './Components/LoginPage/LoginPage'
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -36,6 +37,7 @@ function App() {
         <Route path="/news-add" element={<AddNews />} />
         <Route path="/manage-forum" element={<ManageForum />} />
         <Route path="/manage-users" element={<ManageUsers />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </>
   )

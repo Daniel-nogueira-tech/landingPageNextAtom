@@ -85,6 +85,11 @@
     font-size: 1.2rem;
     color: #fff;
     font-weight: 600;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .news-meta {
@@ -168,6 +173,30 @@
     text-align: center;
     padding: 30px;
     font-size: 1.1rem;
+}
+
+@media (max-width: 480px) {
+    .news-list-container {
+        flex-direction: column;
+    }
+
+    .news-thumbnail {
+        display: none;
+    }
+
+    .news-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .news-details h3 {
+        font-size: 1rem;
+        margin-top: 10px;
+    }
+
+    .news-meta {
+        font-size: 0.8rem;
+    }
 }
 
 

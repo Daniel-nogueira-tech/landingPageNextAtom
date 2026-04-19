@@ -1,56 +1,59 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from '../Sidebar/Sidebar';
 import './ManageUsers.css';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Edit3, Trash2, X } from 'lucide-react';
+import { Search, Edit3, Trash2, X, User } from 'lucide-react';
+import { ContextApp } from '../../Context/ContextApp';
 
-const initialUsers = [
-    { id: 1, name: 'João Silva', email: 'joao@crypto.com', plan: 'Free' },
-    { id: 2, name: 'Admin Supremo', email: 'admin@cripto.io', plan: 'Premium' },
-    { id: 3, name: 'Maria Souza', email: 'maria.souza@gmail.com', plan: 'Pro' },
-    { id: 4, name: 'Carlos Satoshi', email: 'carlos.nakamoto@web3.com', plan: 'Pro' },
-    { id: 5, name: 'Ana Ethereum', email: 'ana.eth@crypto.com', plan: 'Premium' }
-];
+
 
 const ManageUsers = () => {
-    const [users, setUsers] = useState(initialUsers);
+    const { allUsers, getAllUsersToAdmin, editUserPlan, deleteUser } = useContext(ContextApp);
+    const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [editingUser, setEditingUser] = useState(null);
 
-    // Form states
+
+    // Form states  
     const [editName, setEditName] = useState('');
     const [editEmail, setEditEmail] = useState('');
     const [editPlan, setEditPlan] = useState('Free');
 
+    // busca os usuários quando o componente é montado
+    useEffect(() => {
+        getAllUsersToAdmin();
+    }, []);
+
+    // busca os usuários
     const handleSearch = (e) => {
         setSearchTerm(e.target.value.toLowerCase());
     };
 
-    const filteredUsers = users.filter(
-        (user) =>
-            user.name.toLowerCase().includes(searchTerm) ||
-            user.email.toLowerCase().includes(searchTerm)
-    );
+    // filtra os usuários
+    const filteredUsers = (allUsers ?? []).filter(user => {
+        const name = user.name?.toLowerCase() || '';
+        const email = user.email?.toLowerCase() || '';
+        const search = searchTerm.toLowerCase();
 
-    const handleDelete = (id) => {
-        if (window.confirm("Tem certeza que deseja remover este usuário?")) {
-            setUsers(users.filter(user => user.id !== id));
-        }
-    };
+        return name.includes(search) || email.includes(search);
+    });
 
+    // abre o modal de edição
     const openEditModal = (user) => {
         setEditingUser(user);
         setEditName(user.name);
         setEditEmail(user.email);
         setEditPlan(user.plan);
     };
-
+    // fecha o modal de edição
     const closeEditModal = () => {
         setEditingUser(null);
     };
 
+    // salva as alterações
     const handleSave = (e) => {
         e.preventDefault();
+        editUserPlan(editingUser._id, editPlan, editEmail, editName);
         setUsers(users.map(u =>
             u.id === editingUser.id
                 ? { ...u, name: editName, email: editEmail, plan: editPlan }
@@ -59,6 +62,7 @@ const ManageUsers = () => {
         closeEditModal();
     };
 
+    // animações
     const staggerContainer = {
         hidden: { opacity: 0 },
         show: {
@@ -66,11 +70,13 @@ const ManageUsers = () => {
             transition: { staggerChildren: 0.1 }
         }
     };
-
+    // animação da linha
     const rowVariant = {
         hidden: { opacity: 0, y: 15 },
         show: { opacity: 1, y: 0, transition: { type: "tween" } }
     };
+
+
 
     return (
         <div className="admin-dashboard-container">
@@ -112,9 +118,9 @@ const ManageUsers = () => {
                             animate="show"
                         >
                             <AnimatePresence>
-                                {filteredUsers.map((user) => (
+                                {filteredUsers.map((user, index) => (
                                     <motion.tr
-                                        key={user.id}
+                                        key={index}
                                         variants={rowVariant}
                                         exit={{ opacity: 0, x: -20 }}
                                         layout
@@ -131,7 +137,7 @@ const ManageUsers = () => {
                                                 <button className="btn-icon btn-edit" title="Editar" onClick={() => openEditModal(user)}>
                                                     <Edit3 size={18} />
                                                 </button>
-                                                <button className="btn-icon btn-delete" title="Excluir" onClick={() => handleDelete(user.id)}>
+                                                <button className="btn-icon btn-delete" title="Excluir" onClick={() => deleteUser(user._id)}>
                                                     <Trash2 size={18} />
                                                 </button>
                                             </div>
@@ -182,9 +188,9 @@ const ManageUsers = () => {
                                     <div className="form-group">
                                         <label>Plano</label>
                                         <select value={editPlan} onChange={(e) => setEditPlan(e.target.value)}>
-                                            <option value="Free">Free</option>
-                                            <option value="Pro">Pro</option>
-                                            <option value="Premium">Premium</option>
+                                            <option value="free">Free</option>
+                                            <option value="pro">Pro</option>
+                                            <option value="premium">Premium</option>
                                         </select>
                                     </div>
                                     <div className="modal-footer">

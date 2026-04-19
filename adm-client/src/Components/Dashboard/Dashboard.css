@@ -255,4 +255,21 @@
         grid-template-columns: 1fr;
     }
 
+    .chart-container {
+        min-width: 200px;
+        padding: 10px;
+    }
+
+    .line-chart-wrapper {
+        height: 200px;
+    }
+
+    .doughnut-chart-wrapper {
+        height: 200px;
+    }
+
+    .admin-main-content {
+        margin-top: 30px;
+    }
+
 }

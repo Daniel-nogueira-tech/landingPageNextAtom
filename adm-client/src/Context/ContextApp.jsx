@@ -161,7 +161,6 @@ export const ContextAppProvider = ({ children }) => {
 
     // Edita o conteúdo
     const addNewsContent = async (item) => {
-        console.log(item);
         try {
             const response = await axios.post(`${Url}/api/news-content/createNewsContent`, {
                 slug: item.slug,
@@ -203,7 +202,6 @@ export const ContextAppProvider = ({ children }) => {
     // Remover post e comentarios
     const deleteForumContent = async (commentId, postId, replyId, replyReplyId) => {
 
-        console.log(commentId, postId, replyId, replyReplyId);
         if (!confirm("Tem certeza que deseja deletar este fórum?")) {
             return;
         }
@@ -251,7 +249,6 @@ export const ContextAppProvider = ({ children }) => {
 
     // adcionar comentario
     const addReplyForum = async (postId, commentId, replyId, data) => {
-        console.log(postId, commentId, replyId, data);
 
         if (!postId || !data?.content || !data?.author) {
             return;
@@ -267,7 +264,6 @@ export const ContextAppProvider = ({ children }) => {
             isAdmin: data.isAdmin || false
         };
 
-        console.log("ENVIANDO:", payload);
 
         try {
             const response = await axios.post(
@@ -289,13 +285,97 @@ export const ContextAppProvider = ({ children }) => {
     };
 
 
+    //--------------------------/usuários/--------------------------/
+    //pegar todos os usuarios
+    const [allUsers, setAllUsers] = useState([]);
+    const getAllUsersToAdmin = async () => {
+        try {
+            const response = await axios.get(`${Url}/api/userAdmin/getAllUsersToAdmin`);
+            if (response.data.success) {
+                setAllUsers(response.data.userAllToAdmin);
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message);
+            console.error('Error fetching all users:', error);
+        }
+    };
+
+    // editar usuario
+    const editUserPlan = async (id, plan, email, name) => {
+        if (!id) {
+            return;
+        }
+        const payload = {
+            id: id,
+            plan: plan,
+            email: email,
+            name: name
+        };
+        try {
+            const response = await axios.put(`${Url}/api/userAdmin/update-plan`, payload);
+            if (response.data.success) {
+                setAllUsers(response.data.userAllToAdmin);
+            }
+            toast.success(response.data.message);
+            getAllUsersToAdmin();
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.error('Error fetching all users:', error);
+        }
+    };
+
+    // deletar usuario
+    const deleteUser = async (id) => {
+        if (!id) {
+            return;
+        }
+        if (!confirm("Tem certeza que deseja remover este usuário?")) {
+            return;
+        }
+        try {
+            const response = await axios.delete(`${Url}/api/userAdmin/delete-user`, { data: { id } });
+            if (response.data.success) {
+                setAllUsers(response.data.userAllToAdmin);
+            }
+            toast.success(response.data.message);
+            getAllUsersToAdmin();
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.error('Error fetching all users:', error);
+        }
+    };
+
+    // Login
+    const login = async (email, password) => {
+        if (!email || !password) {
+            return;
+        }
+        const payload = {
+            email: email,
+            password: password
+        };
+        console.log(payload);
+        try {
+            const response = await axios.post(`${Url}/api/userAdmin/login`, payload);
+            if (response.data.success) {
+                localStorage.setItem("token", response.data.token);
+            }
+            toast.success(response.data.message);
+            getAllUsersToAdmin();
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.error('Error fetching all users:', error);
+        }
+    };
+
 
     useEffect(() => {
         async function loadData() {
             await Promise.all([
                 getLearningContent(),
                 getForumContent(),
-                getNewsContent()
+                getNewsContent(),
+                getAllUsersToAdmin()
             ]);
         }
         loadData();
@@ -322,7 +402,13 @@ export const ContextAppProvider = ({ children }) => {
         deleteForumContent,
         editForumContent,
         //comentarios
-        addReplyForum
+        addReplyForum,
+        //usuarios
+        getAllUsersToAdmin,
+        allUsers,
+        editUserPlan,
+        deleteUser,
+        login
     }
     return (
         <ContextApp.Provider value={contextValue}>

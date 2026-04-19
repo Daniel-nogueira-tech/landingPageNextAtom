@@ -63,6 +63,11 @@
     font-size: 1.15rem;
     color: #fff;
     font-weight: 600;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .card-id {
@@ -272,4 +277,40 @@
     font-weight: 600;
     cursor: pointer;
     color: white;
+}
+
+@media (max-width: 768px) {
+    .content-list-container {
+        padding: 10px;
+    }
+
+    .content-card {
+        padding: 10px;
+        margin-bottom: 10px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .card-info h3 {
+        font-size: 1rem;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 1180px) {
+    .content-card {
+        gap: 10px;
+    }
+
+    .card-image img {
+        width: 90%;
+        height: 90%;
+        object-fit: cover;
+    }
 }

@@ -126,3 +126,90 @@
     padding-top: 16px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+/* --- Menu Mobile UI --- */
+
+.mobile-hamburger-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    background: rgba(30, 30, 40, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.mobile-hamburger-btn.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.mobile-hamburger-btn:hover {
+    background: rgba(138, 43, 226, 0.3);
+    border-color: #bc13fe;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75);
+    /* Darkening page */
+    z-index: 1001;
+}
+
+.mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80%;
+    height: 100vh;
+    z-index: 1002;
+    background: rgba(15, 15, 25, 0.85);
+    /* Intense glassmorphism base */
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-right: 1px solid rgba(138, 43, 226, 0.2);
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+}
+
+.close-sidebar-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: #a1a1aa;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-sidebar-btn:hover {
+    color: #ef4444;
+}
+
+@media (max-width: 768px) {
+    .admin-sidebar {
+        display: none;
+    }
+
+    .mobile-sidebar {
+        display: flex;
+        /* Override previous rule to show exclusively mobile drawer */
+    }
+}
