@@ -5,22 +5,41 @@ import { useNavigate } from 'react-router-dom';
 import { ContextApp } from '../../Context/ContextApp';
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const { login } = useContext(ContextApp);
+    const { Url } = useContext(ContextApp);
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const handleSubmit = async (e) => {
+    // Login
+    const login = async (email, password, e) => {
         e.preventDefault();
         setError('');
-        const success = await login(email, password);
-        if (success) {
-            navigate('/dashboard');
-        } else {
-            setError('Email ou senha incorretos');
+        if (!email || !password) {
+            return;
+        }
+        const payload = {
+            email: email,
+            password: password
+        };
+        navigate('/dashboard');
+        console.log(payload);
+        try {
+            const response = await axios.post(`${Url}/api/userAdmin/login`, payload);
+            if (response.data.success) {
+                localStorage.setItem("token", response.data.token);
+            }
+            toast.success(response.data.message);
+            getAllUsersToAdmin();
+        } catch (error) {
+            toast.error(error.response.data.message);
+            setError(error.response.data.message);
+            console.error('Error fetching all users:', error);
         }
     };
 
@@ -33,7 +52,7 @@ const LoginPage = () => {
                 className="login-container"
             >
                 <h2>Login</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={login}>
                     <input
                         type="email"
                         placeholder="Email"

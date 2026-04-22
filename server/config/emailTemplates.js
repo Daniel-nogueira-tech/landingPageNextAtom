@@ -42,7 +42,7 @@ export const EMAIL_WELCOME_TEMPLATE = `
                 <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:30px auto;">
                   <tr>
                     <td align="center" bgcolor="#4f46e5" style="border-radius:5px;">
-                      <a href="http://localhost:5173"
+                      <a href="http://localhost:5174"
                          style="display:inline-block; padding:12px 25px; font-size:14px; color:#ffffff; text-decoration:none; border-radius:5px;">
                         Access Platform
                       </a>

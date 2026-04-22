@@ -1,4 +1,29 @@
 import userModels from "../models/userModels.js";
+import userAdminModels from "../models/userAdminModels.js";
+
+
+// get user admin data for admin page
+const getUsersAdminData = async (req, res) => {
+
+    try {
+        const userId = req.userId;
+        const user = await userAdminModels.findById(userId);
+
+        if (!user) {
+            return res.json({ success: false, message: "User not found" })
+        }
+        if (!user.isAccountVerified || user.role !== process.env.ROLE_ADMIN) {
+            return res.json({ success: false, message: "User not verified or not exist" })
+        }
+        res.status(200).json({
+            success: true,
+            userAllToAdmin: user.name,
+            isAccountVerified: user.isAccountVerified,
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+};
 
 //update user plan
 const updateUserPlan = async (req, res) => {
@@ -58,4 +83,4 @@ const getAllUsersToAdmin = async (req, res) => {
 
 
 
-export { updateUserPlan, deleteUser, getAllUsersToAdmin };
+export { updateUserPlan, deleteUser, getAllUsersToAdmin, getUsersAdminData };

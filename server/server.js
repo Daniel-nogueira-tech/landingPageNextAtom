@@ -10,6 +10,7 @@ import learningContentRoutes from "./routes/LearningContentRoutes.js";
 import newsContentRoutes from "./routes/newsContentRoutes.js";
 import forumRoutes from "./routes/forumRoutes.js";
 import routerAdmin from "./routes/userRouterAdmin.js";
+import authAdminRoute from "./routes/authAdminRoutes.js";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/userAdmin", routerAdmin);
+app.use("/api/authAdmin", authAdminRoute);
 app.use("/api/learning-content", learningContentRoutes);
 app.use("/api/news-content", newsContentRoutes);
 app.use("/api/forum", forumRoutes);

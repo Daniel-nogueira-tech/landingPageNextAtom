@@ -294,11 +294,14 @@ export const ContextAppProvider = ({ children }) => {
             if (response.data.success) {
                 setAllUsers(response.data.userAllToAdmin);
             }
+
         } catch (error) {
             toast.error(error.response?.data?.message);
             console.error('Error fetching all users:', error);
         }
     };
+
+    console.log(allUsers);
 
     // editar usuario
     const editUserPlan = async (id, plan, email, name) => {
@@ -345,28 +348,7 @@ export const ContextAppProvider = ({ children }) => {
         }
     };
 
-    // Login
-    const login = async (email, password) => {
-        if (!email || !password) {
-            return;
-        }
-        const payload = {
-            email: email,
-            password: password
-        };
-        console.log(payload);
-        try {
-            const response = await axios.post(`${Url}/api/userAdmin/login`, payload);
-            if (response.data.success) {
-                localStorage.setItem("token", response.data.token);
-            }
-            toast.success(response.data.message);
-            getAllUsersToAdmin();
-        } catch (error) {
-            toast.error(error.response.data.message);
-            console.error('Error fetching all users:', error);
-        }
-    };
+
 
 
     useEffect(() => {
@@ -408,7 +390,7 @@ export const ContextAppProvider = ({ children }) => {
         allUsers,
         editUserPlan,
         deleteUser,
-        login
+
     }
     return (
         <ContextApp.Provider value={contextValue}>

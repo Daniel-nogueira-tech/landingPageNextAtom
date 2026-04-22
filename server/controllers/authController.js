@@ -3,22 +3,60 @@ import jwt from "jsonwebtoken";
 import userModels from "../models/userModels.js";
 import transporter from "../config/nodemailer.js";
 import { EMAIL_WELCOME_TEMPLATE, EMAIL_VERIFY_EMAIL_TEMPLATE, EMAIL_RESET_PASSWORD_TEMPLATE } from "../config/emailTemplates.js";
+import dotenv from "dotenv";
+dotenv.config();
 
+//register user
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
-
+    const allowedDomains = [
+        "gmail.com",
+        "hotmail.com",
+        "outlook.com",
+        "yahoo.com",
+        "icloud.com",
+        "bol.com.br",
+        "uol.com.br",
+        "globo.com",
+        "ig.com.br",
+        "terra.com.br"
+    ];
+    //validar se todos os campos foram preenchidos
     if (!name || !email || !password) {
         return res.status(400).json({ success: false, message: "All fields are required" })
     };
+    //validar dominio do email
+    const emailDomain = email.split("@")[1];
+    if (!allowedDomains.includes(emailDomain)) {
+        return res.status(400).json({ success: false, message: "Invalid email domain" });
+    }
+    //regex para validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ success: false, message: "E-mail inválido" });
+    }
+    //validar senha
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+        return res.status(400).json({ success: false, message: "A senha deve ter no mínimo 8 caracteres e conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial." });
+    }
+    //validar nome
+    const nameRegex = /^[A-Za-zÀ-ÖØ-ößçÇãÃõÕáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+    if (!nameRegex.test(name)) {
+        return res.status(400).json({ success: false, message: "O nome deve conter apenas letras e espaços." });
+    }
 
     try {
         const userExists = await userModels.findOne({ email });
         if (userExists) {
             return res.status(400).json({ success: false, message: "User already exists" })
         }
+        //definir role como admin
+        const role = process.env.ROLE_USER;
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        const user = await userModels.create({ name, email, password: hashedPassword });
+        const user = await userModels.create({ name, email, password: hashedPassword, role });
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
         res.cookie("token", token, {
@@ -44,12 +82,42 @@ const registerUser = async (req, res) => {
     }
 };
 
+
+//login user
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
-
+    //validar se todos os campos foram preenchidos
     if (!email || !password) {
         return res.status(400).json({ success: false, message: "All fields are required" })
     };
+    const allowedDomains = [
+        "gmail.com",
+        "hotmail.com",
+        "outlook.com",
+        "yahoo.com",
+        "icloud.com",
+        "bol.com.br",
+        "uol.com.br",
+        "globo.com",
+        "ig.com.br",
+        "terra.com.br"
+    ];
+    //validar dominio do email
+    const emailDomain = email.split("@")[1];
+    if (!allowedDomains.includes(emailDomain)) {
+        return res.status(400).json({ success: false, message: "email ou senha invalidos" });
+    }
+    //validar se o email é valido
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ success: false, message: "email ou senha invalidos" });
+    }
+    //validar senha
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+        return res.status(400).json({ success: false, message: "email ou senha invalidos" });
+    }
+
 
     try {
         const user = await userModels.findOne({ email });
@@ -74,7 +142,13 @@ const loginUser = async (req, res) => {
     }
 };
 
+//logout user
 const logoutUser = async (req, res) => {
+    //validar se o usuario esta logado
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(400).json({ success: false, message: "User is not logged in" })
+    }
     try {
         res.clearCookie("token", {
             httpOnly: true,
@@ -163,6 +237,9 @@ const checkAuth = async (req, res) => {
         if (!user) {
             return res.status(400).json({ success: false, message: "User not found" })
         }
+        if (user.role !== process.env.ROLE_USER) {
+            return res.status(400).json({ success: false, message: "User is not user" })
+        }
         res.status(200).json({ success: true, user });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -204,7 +281,6 @@ const sendResetOtp = async (req, res) => {
 
 const resetPassword = async (req, res) => {
     const { email, otp, newPassword } = req.body;
-    console.log(email, otp, newPassword);
 
     if (!email || !otp || !newPassword) {
         return res.status(400).json({ success: false, message: "All fields are required" })

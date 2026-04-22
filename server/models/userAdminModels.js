@@ -9,12 +9,10 @@ const userSchema = new mongoose.Schema({
     isAccountVerified: { type: Boolean, default: false },
     resetOtp: { type: String, default: "" },
     resetOtpExpireAt: { type: Number, default: 0 },
-    cartData: { type: Object, default: {} },
-    plan: { type: String, enum: ["free", "pro", "premium"], default: "free" },
-    role: { type: String, default: "user" }
+    role: { type: String, default: "admin" }
 }, { timestamps: true });
 
 
-const userModels = mongoose.models.user || mongoose.model("user", userSchema);
+const userAdminModels = mongoose.models.userAdmin || mongoose.model("userAdmin", userSchema);
 
-export default userModels;
+export default userAdminModels;
