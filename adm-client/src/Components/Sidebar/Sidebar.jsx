@@ -12,12 +12,15 @@ import {
     FaComments,
     FaUser,
     FaBars,
-    FaTimes
+    FaTimes,
 } from 'react-icons/fa';
+import { ContextApp } from '../../Context/ContextApp';
+import { useContext } from 'react';
 
 const Sidebar = () => {
     const location = useLocation();
     const isActive = (path) => location.pathname === path ? 'active' : '';
+    const { logoutAdmin } = useContext(ContextApp);
 
     const [isOpen, setIsOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -34,7 +37,8 @@ const Sidebar = () => {
     };
 
     const sidebarContent = (
-        <>
+
+        < >
             <div className="sidebar-brand">
                 {isMobile && (
                     <button className="close-sidebar-btn" onClick={closeSidebarMobile}>
@@ -89,14 +93,17 @@ const Sidebar = () => {
             </div>
 
             <div className="sidebar-footer">
-                <div className="nav-item">
-                    <FaCog className="nav-icon" /> Configurações
-                </div>
-                <div className="nav-item text-danger" onClick={closeSidebarMobile}>
+                <Link to="/settings" style={{ textDecoration: 'none' }} className={isActive('/settings')} onClick={closeSidebarMobile}>
+                    <div className="nav-item">
+                        <FaCog className="nav-icon" /> Configurações
+                    </div>
+                </Link>
+                <div className="nav-item text-danger" onClick={logoutAdmin}>
                     <FaSignOutAlt className="nav-icon" /> Sair
                 </div>
             </div>
         </>
+
     );
 
     return (

@@ -8,8 +8,8 @@ import { ContextApp } from '../../Context/ContextApp';
 
 
 const ManageForum = () => {
-    const { forumContent, getForumContent, deleteForumContent, editForumContent, addReplyForum } = useContext(ContextApp);
-    console.log(forumContent);
+    const { forumContent, getForumContent, deleteForumContent, editForumContent, addReplyForum, user } = useContext(ContextApp);
+
     const [expandedId, setExpandedId] = useState(null);
     const [replyTexts, setReplyTexts] = useState({});
     const [replyToReply, setReplyToReply] = useState({});
@@ -20,6 +20,12 @@ const ManageForum = () => {
     useEffect(() => {
         getForumContent();
     }, []);
+
+    // função para pegar apenas o primeiro nome do usuário
+    const getFirstName = (name) => {
+        if (!name) return '';
+        return name.split(' ')[0];
+    };
 
     // toggle para expandir e recolher post
     const toggleExpand = (id) => {
@@ -35,7 +41,7 @@ const ManageForum = () => {
     const addReply = (postId) => {
         const content = replyTexts[postId];
         addReplyForum(postId, null, null, {
-            author: "Admin Oficial",
+            author: getFirstName(user.userAllToAdmin),
             content,
             isAdmin: true,
             date: new Date()
@@ -59,7 +65,7 @@ const ManageForum = () => {
         const content = replyToReply[replyId];
 
         addReplyForum(postId, commentId, replyId, {
-            author: "Admin Oficial",
+            author: getFirstName(user.userAllToAdmin),
             content,
             isAdmin: true,
             date: new Date()

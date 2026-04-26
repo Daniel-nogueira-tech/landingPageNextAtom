@@ -9,7 +9,7 @@
 
 .login-container {
     width: 300px;
-    height: 300px;
+    height: auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
@@ -73,4 +73,30 @@
 
 .login-container input:hover {
     border-color: #000;
+}
+
+/* logo */
+.logo-login {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+
+}
+
+.logo-login h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    margin-top: 5px;
+}
+
+.logo-login h2 span {
+    color: #9d4edd;
+}
+
+.register-link {
+    cursor: pointer;
+    color: #9d4edd;
 }

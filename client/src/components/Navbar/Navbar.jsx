@@ -90,7 +90,7 @@ const Navbar = () => {
                         <li><a href="#learn">Aprender</a></li>
                         <li><a href="#download">Download</a></li>
                         <li><a href="#news">Notícias</a></li>
-                        <li><Link to="/forum">Fórum</Link></li>
+                        <li><Link to="/forum">Comunidade</Link></li>
                         <li><Link to="/planos">Planos</Link></li>
                     </ul>
 

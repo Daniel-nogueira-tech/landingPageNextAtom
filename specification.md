@@ -55,6 +55,12 @@
 - **CRUD:** Funções para deletar e editar dados cadastrais e nível de acesso.
 - **UI:** Badges de plano coloridos e linhas de tabela com efeito Glassmorphism.
 
+### 9. Configurações e Permissões (`/admin/settings`)
+- **Gestão de Equipe:** Lista de e-mails autorizados para acesso administrativo.
+- **Whitelist:** Funcionalidade para adicionar novos e-mails à lista de permissões.
+- **Controle:** Opção de revogar acesso (deletar colaborador) instantaneamente.
+- **UI:** Layout limpo, foco em formulários e feedbacks de ação (sucesso/erro).
+
 ## 🏗️ Regras de Código
 - Criar pastas individuais: `src/components/Home/`, `src/components/News/`, etc.
 - O arquivo `App.jsx` deve conter o gerenciamento de rotas.

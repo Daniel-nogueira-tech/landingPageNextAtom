@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Dashboard.css';
 import { motion } from 'framer-motion';
+import { ShieldCheck } from 'lucide-react';
 import {
     FaUsers,
     FaDollarSign,
@@ -23,6 +24,8 @@ import {
     Filler
 } from 'chart.js';
 import { Line, Doughnut } from 'react-chartjs-2';
+import { ContextApp } from '../../Context/ContextApp';
+import { useContext } from 'react';
 
 ChartJS.register(
     CategoryScale,
@@ -37,6 +40,8 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
+    const { user, getUser } = useContext(ContextApp);
+
     // Mock Data for Charts
     const lineChartData = {
         labels: ['01/Oct', '05/Oct', '10/Oct', '15/Oct', '20/Oct', '25/Oct', '30/Oct'],
@@ -96,6 +101,15 @@ const Dashboard = () => {
             }
         }
     };
+    // função para pegar apenas os 2 primeiros nomes
+    const getFirstTwoNames = (name) => {
+        if (!name) return '';
+        return name.split(' ').slice(0, 1).join(' ');
+    };
+
+    useEffect(() => {
+        getUser();
+    }, []);
 
     return (
         <div className="admin-dashboard-container">
@@ -108,8 +122,9 @@ const Dashboard = () => {
                 <header className="main-header">
                     <h1>Visão Geral</h1>
                     <div className="admin-profile">
-                        <span>Admin</span>
-                        <div className="avatar">A</div>
+                        {user?.isAccountVerified && <ShieldCheck size={20} color="#fffb0094" />}
+                        <p>Admin:</p><span>{getFirstTwoNames(user?.userAllToAdmin)}</span>
+                        <div className="avatar">{user?.userAllToAdmin?.charAt(0).toUpperCase()}</div>
                     </div>
                 </header>
 

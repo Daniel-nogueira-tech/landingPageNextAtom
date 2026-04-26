@@ -7,12 +7,12 @@ const getUsersAdminData = async (req, res) => {
 
     try {
         const userId = req.userId;
+        //Guards
         const user = await userAdminModels.findById(userId);
-
         if (!user) {
             return res.json({ success: false, message: "User not found" })
         }
-        if (!user.isAccountVerified || user.role !== process.env.ROLE_ADMIN) {
+        if (user.role !== "admin") {
             return res.json({ success: false, message: "User not verified or not exist" })
         }
         res.status(200).json({
@@ -29,8 +29,17 @@ const getUsersAdminData = async (req, res) => {
 const updateUserPlan = async (req, res) => {
     try {
         const { id, plan, email, name } = req.body;
+        const userId = req.userId;
+        //Guards
+        const userAdmin = await userAdminModels.findById(userId);
+        if (!userAdmin) {
+            return res.status(404).json({ success: false, message: "User not found" })
+        }
+        if (!userAdmin.isAccountVerified || userAdmin.role !== "admin") {
+            return res.status(403).json({ success: false, message: "User not verified or not exist" })
+        }
         if (!id || !plan || !email || !name) {
-            return res.json({ success: false, message: "Missing required fields" });
+            return res.status(400).json({ success: false, message: "Missing required fields" });
         }
 
         const user = await userModels.findByIdAndUpdate(
@@ -54,9 +63,21 @@ const updateUserPlan = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const { id } = req.body;
+        const userId = req.userId;
+        //Guards
+        if (!id) {
+            return res.status(400).json({ success: false, message: "Missing required fields" });
+        }
         const user = await userModels.findById(id);
         if (!user) {
             return res.json({ success: false, message: "User not found" })
+        }
+        const userAdmin = await userAdminModels.findById(userId);
+        if (!userAdmin) {
+            return res.status(404).json({ success: false, message: "User not found" })
+        }
+        if (!userAdmin.isAccountVerified || userAdmin.role !== "admin") {
+            return res.status(403).json({ success: false, message: "User not verified or not exist" })
         }
         await userModels.deleteOne({ _id: id });
         res.status(200).json({
@@ -70,6 +91,15 @@ const deleteUser = async (req, res) => {
 
 //get all users to admin
 const getAllUsersToAdmin = async (req, res) => {
+    const userId = req.userId;
+    //Guards
+    const userAdmin = await userAdminModels.findById(userId);
+    if (!userAdmin) {
+        return res.status(404).json({ success: false, message: "User not found" })
+    }
+    if (!userAdmin.isAccountVerified || userAdmin.role !== "admin") {
+        return res.status(403).json({ success: false, message: "User not verified or not exist" })
+    }
     try {
         const users = await userModels.find({}, 'name email plan');
         res.status(200).json({

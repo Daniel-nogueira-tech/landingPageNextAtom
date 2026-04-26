@@ -1,7 +1,18 @@
 import forumModels from "../models/forumModels.js";
+import userAdminModels from "../models/userAdminModels.js";
+import userModels from "../models/userModels.js";
 
 // get forum data
 const getForumData = async (req, res) => {
+    const userId = req.userId;
+
+    const user = await userModels.findById(userId, "role");
+    if (!user) {
+        return res.status(404).json({ success: false, message: "Usuário não encontrado" });
+    }
+    if (user.role !== "user") {
+        return res.status(403).json({ success: false, message: "Não autorizado" });
+    }
     try {
         const forumData = await forumModels.find({}).sort({ createdAt: -1 });
         if (!forumData || forumData.length === 0) {
@@ -15,6 +26,15 @@ const getForumData = async (req, res) => {
 
 // add forum data
 const addForumData = async (req, res) => {
+    const userId = req.userId;
+
+    const user = await userModels.findById(userId, "role isAccountVerified");
+    if (!user) {
+        return res.status(404).json({ success: false, message: "Usuário não encontrado" });
+    }
+    if (user.role !== "user" || user.isAccountVerified !== true) {
+        return res.status(403).json({ success: false, message: "Não autorizado" });
+    }
     try {
         const { title, content, author, category, tags, comments, imageUrl, isVerified, views, isPinned } = req.body;
 
@@ -29,6 +49,15 @@ const addForumData = async (req, res) => {
 
 // delete forum data
 const deleteForumData = async (req, res) => {
+    const userId = req.userId;
+
+    const user = await userModels.findById(userId, "role isAccountVerified");
+    if (!user) {
+        return res.status(404).json({ success: false, message: "Usuário não encontrado" });
+    }
+    if (user.role !== "user" || user.isAccountVerified !== true) {
+        return res.status(403).json({ success: false, message: "Não autorizado" });
+    }
     try {
         const { id } = req.body;
         if (!id) {
@@ -48,6 +77,15 @@ const deleteForumData = async (req, res) => {
 //---------------------/Admin/---------------------//
 const getForumDataAdmin = async (req, res) => {
     try {
+        const userId = req.userId;
+
+        const user = await userAdminModels.findById(userId, "role isAccountVerified");
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Usuário não encontrado" });
+        }
+        if (user.role !== "admin" || user.isAccountVerified !== true) {
+            return res.status(403).json({ success: false, message: "Não autorizado" });
+        }
         const forumData = await forumModels.find({}).sort({ createdAt: -1 });
         if (!forumData) {
             return res.status(404).json({ success: false, message: "Fórum não encontrado" });
@@ -58,26 +96,21 @@ const getForumDataAdmin = async (req, res) => {
     }
 };
 
-// add comment admin
-const addCommentAdmin = async (req, res) => {
-    try {
-        const { title, content, author, category, tags, imageUrl, comments, isVerified, views, isPinned } = req.body;
-
-        const forumData = new forumModels({ title, content, author, category, tags, imageUrl, comments, isVerified, views, isPinned });
-        await forumData.save();
-        if (!forumData) {
-            return res.status(404).json({ success: false, message: "Fórum não encontrado" });
-        }
-        res.status(200).json({ success: true, message: "Comentário adicionado com sucesso" });
-    } catch (error) {
-        res.status(500).json({ success: false, message: "Internal server error" });
-    }
-};
 
 // update forum data admin
 const updateForumDataAdmin = async (req, res) => {
     try {
-        const { id, isVerified, isPinned, comments, author, content, date } = req.body;
+        const { id, isVerified, isPinned } = req.body;
+        const userId = req.userId;
+
+        const user = await userAdminModels.findById(userId, "role isAccountVerified");
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Usuário não encontrado" });
+        }
+        if (user.role !== "admin" || user.isAccountVerified !== true) {
+            return res.status(403).json({ success: false, message: "Não autorizado" });
+        }
+
         if (!id) {
             return res.status(400).json({ success: false, message: "ID do fórum não fornecido" });
         }
@@ -173,7 +206,6 @@ const addReplyAdmin = async (req, res) => {
             }
 
             const reply = comment.replies.id(replyId);
-            console.log(reply);
 
             if (!reply) {
                 return res.status(404).json({
@@ -214,6 +246,15 @@ const addReplyAdmin = async (req, res) => {
 const deleteCommentAdmin = async (req, res) => {
     try {
         const { postId, commentId, replyId, replyReplyId } = req.body;
+        const userId = req.userId;
+
+        const user = await userAdminModels.findById(userId, "role isAccountVerified");
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Usuário não encontrado" });
+        }
+        if (user.role !== "admin" || user.isAccountVerified !== true) {
+            return res.status(403).json({ success: false, message: "Não autorizado" });
+        }
 
         if (!postId) {
             return res.status(400).json({ success: false, message: "postId obrigatório" });
@@ -222,15 +263,16 @@ const deleteCommentAdmin = async (req, res) => {
         // 🟢 deletar post
         if (postId && !commentId && !replyId && !replyReplyId) {
             await forumModels.findByIdAndDelete(postId);
-            return res.json({ success: true, message: "Post deletado" });
+            return res.status(200).json({ success: true, message: "Post deletado" });
         }
+
 
         // 🟢 deletar comentário
         if (commentId && !replyId && !replyReplyId) {
             await forumModels.findByIdAndUpdate(postId, {
                 $pull: { comments: { _id: commentId } }
             });
-            return res.json({ success: true, message: "Comentário deletado" });
+            return res.status(200).json({ success: true, message: "Comentário deletado" });
         }
 
         // 🟡 deletar reply
@@ -240,7 +282,7 @@ const deleteCommentAdmin = async (req, res) => {
                     "comments.$[].replies": { _id: replyId }
                 }
             });
-            return res.json({ success: true, message: "Reply deletada" });
+            return res.status(200).json({ success: true, message: "Resposta deletada" });
         }
 
         // 🔴 deletar reply da reply
@@ -250,7 +292,7 @@ const deleteCommentAdmin = async (req, res) => {
                     "comments.$[].replies.$[].replyReply": { _id: replyReplyId }
                 }
             });
-            return res.json({ success: true, message: "Reply da reply deletada" });
+            return res.status(200).json({ success: true, message: "Resposta deletada" });
         }
 
     } catch (error) {
@@ -259,4 +301,4 @@ const deleteCommentAdmin = async (req, res) => {
     }
 };
 
-export { getForumData, addForumData, deleteForumData, getForumDataAdmin, updateForumDataAdmin, deleteCommentAdmin, addCommentAdmin, addReplyAdmin };
+export { getForumData, addForumData, deleteForumData, getForumDataAdmin, updateForumDataAdmin, deleteCommentAdmin, addReplyAdmin };

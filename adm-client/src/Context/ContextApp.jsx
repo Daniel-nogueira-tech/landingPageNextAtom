@@ -4,11 +4,43 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 export const ContextApp = createContext();
-const Url = "http://localhost:4000";
+axios.defaults.withCredentials = true;
+const Url = import.meta.env.VITE_BACKEND_URL;
 
 export const ContextAppProvider = ({ children }) => {
     const [contents, setContents] = useState([]);
     const navigate = useNavigate();
+
+    //--------------------------/verificar se o admin está autenticado/--------------------------/
+
+    // verificar se o admin está autenticado
+    const checkAuth = async () => {
+        try {
+            const response = await axios.post(
+                `${Url}/api/authAdmin/is-admin-authenticated`,
+                {},
+                { withCredentials: true }
+            );
+
+            if (!response.data.success) {
+                navigate("/login");
+            }
+
+        } catch (error) {
+            // aqui cai quando token expirou ou é inválido
+            navigate("/login");
+        }
+    };
+    // interceptador global de resposta para verificar se o admin está autenticado
+    axios.interceptors.response.use(
+        response => response,
+        error => {
+            if (error.response?.status === 401) {
+                window.location.href = "/login";
+            }
+            return Promise.reject(error);
+        }
+    );
 
     //--------------------------/conteúdos de aprendizado/--------------------------/
 
@@ -301,7 +333,6 @@ export const ContextAppProvider = ({ children }) => {
         }
     };
 
-    console.log(allUsers);
 
     // editar usuario
     const editUserPlan = async (id, plan, email, name) => {
@@ -348,6 +379,37 @@ export const ContextAppProvider = ({ children }) => {
         }
     };
 
+    // pegar usuario logado
+    const [user, setUser] = useState(null);
+    const getUser = async () => {
+        try {
+            const response = await axios.get(`${Url}/api/userAdmin/getUsersAdminData`);
+            if (response.data.success) {
+                setUser(response.data);
+            }
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.error('Error fetching user:', error);
+        }
+    };
+
+    // logout admin
+    const logoutAdmin = async () => {
+        if (!confirm("Tem certeza que deseja sair?")) {
+            return;
+        }
+        try {
+            const response = await axios.post(`${Url}/api/authAdmin/logout`);
+            if (response.data.success) {
+                setUser(null);
+                navigate('/login');
+            }
+            toast.success(response.data.message);
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.error('Error fetching user:', error);
+        }
+    };
 
 
 
@@ -357,7 +419,10 @@ export const ContextAppProvider = ({ children }) => {
                 getLearningContent(),
                 getForumContent(),
                 getNewsContent(),
-                getAllUsersToAdmin()
+                getAllUsersToAdmin(),
+                getUser(),
+                checkAuth()
+
             ]);
         }
         loadData();
@@ -390,6 +455,9 @@ export const ContextAppProvider = ({ children }) => {
         allUsers,
         editUserPlan,
         deleteUser,
+        user,
+        getUser,
+        logoutAdmin
 
     }
     return (

@@ -1,13 +1,25 @@
 /* Sidebar */
+.sidebar-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
 .admin-sidebar {
     position: sticky;
     top: 0;
-    height: 92vh;
+    height: 97vh;
     padding: 24px;
     display: flex;
     flex-direction: column;
     border-right: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #3a3a3a63 transparent;
 }
 
 .sidebar-brand h2 {
@@ -55,11 +67,11 @@
 .nav-item {
     display: flex;
     align-items: center;
-    padding: 14px 16px;
+    padding: 7px 5px;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 0.72rem;
+    font-size: 0.65rem;
     font-weight: 500;
     color: #a0a0a0;
 }
@@ -107,7 +119,7 @@
 
 .action-btn {
     border: none;
-    padding: 14px;
+    padding: 8px;
     border-radius: 12px;
     font-weight: 600;
     display: flex;
@@ -125,6 +137,7 @@
     gap: 4px;
     padding-top: 16px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 30px;
 }
 
 /* --- Menu Mobile UI --- */
@@ -210,6 +223,13 @@
 
     .mobile-sidebar {
         display: flex;
+        height: 95vh;
         /* Override previous rule to show exclusively mobile drawer */
+    }
+}
+
+@media (max-width: 1368px) {
+    .admin-sidebar {
+        height: 97vh;
     }
 }

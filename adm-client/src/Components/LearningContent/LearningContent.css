@@ -44,7 +44,6 @@
     object-fit: cover;
 }
 
-
 .content-card:hover {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(157, 78, 221, 0.6);
@@ -146,17 +145,23 @@
 
 /* Modal Content (Glassmorphism Profundo) */
 .glassmorphism-deep {
+    width: 100%;
+    height: 85%;
+    padding: 2.5rem;
     /* Fundo #1a1a1a com transparência */
     background: rgba(26, 26, 26, 0.85);
     border: 1px solid rgba(157, 78, 221, 0.3);
     border-radius: 16px;
     padding: 32px;
-    width: 90%;
+    width: 100%;
     max-width: 650px;
     /* Sombras roxas suaves */
     box-shadow: 0 10px 40px rgba(116, 0, 184, 0.25);
-    max-height: 85vh;
     overflow-y: auto;
+    /* Scrollbar */
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: #5c5c5c63 transparent;
 }
 
 /* Header Modal */
@@ -191,6 +196,7 @@
 /* Form Styles */
 .modal-body {
     display: grid;
+    justify-content: center;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-bottom: 24px;
@@ -207,7 +213,7 @@
 }
 
 .input-group label {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     color: #c0c0c0;
     font-weight: 500;
 }
@@ -217,7 +223,7 @@
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #fff;
-    padding: 12px 14px;
+    padding: 8px 10px;
     /* Bordas arredondadas */
     border-radius: 8px;
     font-family: inherit;
@@ -301,6 +307,13 @@
         font-size: 1rem;
         margin-top: 10px;
     }
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+
+    }
+
 }
 
 @media (max-width: 1180px) {

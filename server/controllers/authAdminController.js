@@ -49,9 +49,6 @@ const registerAdmin = async (req, res) => {
             return res.status(400).json({ success: false, message: "User already exists" })
         }
 
-        //pegar o role do .env
-        const role = process.env.ROLE_ADMIN || "admin";
-
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -59,7 +56,7 @@ const registerAdmin = async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            role: role
+            role
         });
 
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_ADMIN, { expiresIn: "1d" });
@@ -69,7 +66,6 @@ const registerAdmin = async (req, res) => {
             sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
             maxAge: 24 * 60 * 60 * 1000
         });
-        console.log("add cookie");
 
         //enviar email de boas vindas
         const mailOptions = {
@@ -98,7 +94,6 @@ const loginAdmin = async (req, res) => {
     if (!email || !password) {
         return res.status(400).json({ success: false, message: "All fields are required" })
     };
-    console.log(email, password);
     //validar dominio do email
     const allowedDomains = [
         "gmail.com",
@@ -133,7 +128,7 @@ const loginAdmin = async (req, res) => {
             return res.status(400).json({ success: false, message: "User not found" })
         }
         //verificar se o usuario é admin
-        const isAdmin = user.role === process.env.ROLE_ADMIN;
+        const isAdmin = user.role === "admin";
         if (!isAdmin) {
             return res.status(400).json({ success: false, message: "User is not admin" })
         }
@@ -145,7 +140,7 @@ const loginAdmin = async (req, res) => {
         }
         //gerar token
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_ADMIN, { expiresIn: "1d" });
-        res.cookie("tokenAdmin", token, {
+        res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
@@ -161,15 +156,16 @@ const loginAdmin = async (req, res) => {
 
 // logout admin
 const logoutAdmin = async (req, res) => {
-    if (!req.cookies.tokenAdmin) {
+    const token = req.cookies.token;
+    if (!token) {
         return res.status(400).json({ success: false, message: "Admin not logged in" })
     }
+
     try {
-        res.clearCookie("tokenAdmin", {
+        res.clearCookie("token", {
             httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-            maxAge: 24 * 60 * 60 * 1000
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
         });
         res.status(200).json({ success: true, message: "Admin logged out successfully" });
     } catch (error) {
@@ -245,7 +241,7 @@ const checkUserAdminAuthenticated = async (req, res) => {
         if (!user) {
             return res.status(400).json({ success: false, message: "User not found" })
         }
-        if (user.role !== process.env.ROLE_ADMIN) {
+        if (user.role !== "admin") {
             return res.status(400).json({ success: false, message: "User is not admin" })
         }
         res.status(200).json({ success: true, message: "User is authenticated" });
@@ -257,7 +253,6 @@ const checkUserAdminAuthenticated = async (req, res) => {
 // forgot password
 const sendPasswordOtpAdmin = async (req, res) => {
     const { email } = req.body;
-    console.log(email);
     //validar se todos os campos foram preenchidos
     if (!email) {
         return res.status(400).json({ success: false, message: "All fields are required" })
@@ -267,7 +262,7 @@ const sendPasswordOtpAdmin = async (req, res) => {
         if (!user) {
             return res.status(400).json({ success: false, message: "User not found" })
         }
-        if (user.role !== process.env.ROLE_ADMIN) {
+        if (user.role !== "admin") {
             return res.status(400).json({ success: false, message: "User is not admin" })
         }
         //gerar otp

@@ -5,7 +5,7 @@ const routerAdmin = express.Router();
 
 routerAdmin.put("/update-plan", userAdminAuth, updateUserPlan);
 routerAdmin.delete("/delete-user", userAdminAuth, deleteUser);
-routerAdmin.get("/getAllUsersToAdmin", getAllUsersToAdmin);
+routerAdmin.get("/getAllUsersToAdmin", userAdminAuth, getAllUsersToAdmin);
 routerAdmin.get("/getUsersAdminData", userAdminAuth, getUsersAdminData);
 
 

@@ -26,7 +26,7 @@ const AddNews = () => {
     return (
         <div className='content-news-container'>
             {/* Modal de Atualização (Popup) */}
-            (
+
             <div className="modal-overlay">
                 <motion.div
                     className="modal-content glassmorphism-deep"
@@ -112,7 +112,7 @@ const AddNews = () => {
                     </div>
                 </motion.div>
             </div>
-            )
+
         </div>
     )
 }

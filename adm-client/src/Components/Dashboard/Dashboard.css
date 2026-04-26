@@ -1,7 +1,7 @@
 .admin-dashboard-container {
     display: grid;
+    height: 100%;
     grid-template-columns: 280px 1fr;
-    min-height: 100vh;
     background-color: #0d0d12;
     color: #e0e0e0;
     font-family: 'Inter', system-ui, sans-serif;
@@ -31,10 +31,9 @@
 
 /* Main Content */
 .admin-main-content {
-    padding: 32px 40px;
     height: 100vh;
+    padding: 32px 40px;
     overflow-y: auto;
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -243,6 +242,26 @@
     color: #a0a0a0;
 }
 
+/*Admin profile*/
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-profile p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #fffb00b6;
+    font-weight: 800;
+}
+
+.admin-profile span {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #e0e0e0;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1024px) {
     .charts-grid {
@@ -270,6 +289,22 @@
 
     .admin-main-content {
         margin-top: 30px;
+    }
+
+    .main-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .admin-profile {
+        font-size: 0.7rem;
+    }
+
+    .admin-profile span {
+        font-size: 0.7rem;
+    }
+
+    .admin-profile p {
+        font-size: 0.7rem;
     }
 
 }

@@ -333,4 +333,16 @@
         display: flex;
         gap: 1rem;
     }
+
+    .mf-comment-author {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+        font-size: 0.6rem;
+    }
+
+    .mf-comment-header {
+        align-items: flex-start;
+    }
 }
