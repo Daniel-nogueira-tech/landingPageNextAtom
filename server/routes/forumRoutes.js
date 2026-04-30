@@ -7,9 +7,9 @@ import { accessControlMiddleware } from "../middleware/accessControlMiddleware.j
 const router = express.Router();
 
 // Rotas públicas user
-router.get("/get-forum", userAuth, accessControlMiddleware(["user", "admin", "super-admin"]), getForumData);
-router.post("/add-forum", userAuth, accessControlMiddleware(["user", "admin", "super-admin"]), addForumData);
-router.delete("/delete-forum", userAuth, accessControlMiddleware(["user", "admin", "super-admin"]), deleteForumData);
+router.get("/get-forum", userAuth, accessControlMiddleware(["admin", "super-admin"]), getForumData);
+router.post("/add-forum", userAuth, accessControlMiddleware(["admin", "super-admin"]), addForumData);
+router.delete("/delete-forum", userAuth, accessControlMiddleware(["admin", "super-admin"]), deleteForumData);
 
 // Rotas privadas admin
 router.get("/get-forum-management", userAdminAuth, accessControlMiddleware(["admin", "super-admin"]), getForumDataAdmin);
