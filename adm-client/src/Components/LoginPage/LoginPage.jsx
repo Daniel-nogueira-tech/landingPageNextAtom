@@ -53,7 +53,6 @@ const LoginPage = () => {
         try {
             let endPoint = state ? "register" : "login";
             const response = await axios.post(`${Url}/api/authAdmin/${endPoint}`, payload);
-            toast.success(response.data.message);
             setLoading(true);
             if (response.data.success) {
                 setTimeout(() => {

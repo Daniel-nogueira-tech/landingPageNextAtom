@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export const ContextApp = createContext();
 axios.defaults.withCredentials = true;
@@ -9,12 +9,28 @@ const Url = import.meta.env.VITE_BACKEND_URL;
 
 export const ContextAppProvider = ({ children }) => {
     const [contents, setContents] = useState([]);
+    const [isLogin, setIsLogin] = useState(false);
     const navigate = useNavigate();
+    const pathname = useLocation().pathname;
+
+    // Toast
+    const [toastMsg, setToastMsg] = useState(null);
+    const showToast = (msg) => {
+        setToastMsg(msg);
+        setTimeout(() => setToastMsg(null), 5000);
+    };
+
 
     //--------------------------/verificar se o admin está autenticado/--------------------------/
 
     // verificar se o admin está autenticado
+    const publicRoutes = ["/forgot-password", "/email-verify-admin", "/login", "/invitation-admin"];
+
     const checkAuth = async () => {
+        // 🔓 libera rotas públicas
+        if (publicRoutes.includes(pathname)) {
+            return;
+        }
         try {
             const response = await axios.post(
                 `${Url}/api/authAdmin/is-admin-authenticated`,
@@ -22,25 +38,17 @@ export const ContextAppProvider = ({ children }) => {
                 { withCredentials: true }
             );
 
-            if (!response.data.success) {
+            if (!response.data.success && !publicRoutes[2].includes(pathname)) {
                 navigate("/login");
+            } else {
+                setIsLogin(true);
             }
-
         } catch (error) {
             // aqui cai quando token expirou ou é inválido
             navigate("/login");
         }
     };
-    // interceptador global de resposta para verificar se o admin está autenticado
-    axios.interceptors.response.use(
-        response => response,
-        error => {
-            if (error.response?.status === 401) {
-                window.location.href = "/login";
-            }
-            return Promise.reject(error);
-        }
-    );
+
 
     //--------------------------/conteúdos de aprendizado/--------------------------/
 
@@ -226,8 +234,7 @@ export const ContextAppProvider = ({ children }) => {
                 setForumContent(response.data.forumData);
             }
         } catch (error) {
-            toast.error(error.response.data.message);
-            console.error('Error fetching forum content:', error);
+            console.error('Error fetching forum content:', error.response.data.message);
         }
     };
 
@@ -328,8 +335,7 @@ export const ContextAppProvider = ({ children }) => {
             }
 
         } catch (error) {
-            toast.error(error.response?.data?.message);
-            console.error('Error fetching all users:', error);
+            console.error('Error fetching all users:', error.response?.data?.message);
         }
     };
 
@@ -388,8 +394,7 @@ export const ContextAppProvider = ({ children }) => {
                 setUser(response.data);
             }
         } catch (error) {
-            toast.error(error.response.data.message);
-            console.error('Error fetching user:', error);
+            console.error('Error fetching user:', error.response.data.message);
         }
     };
 
@@ -411,6 +416,64 @@ export const ContextAppProvider = ({ children }) => {
         }
     };
 
+    // verificar email
+    const sendVerificationOtpAdmin = async (e) => {
+        try {
+            e.preventDefault();
+            const { data } = await axios.post(`${Url}/api/authAdmin/send-verify-otp-admin`);
+            if (data.success) {
+                setUser(data);
+            }
+            toast.success(data.message);
+            setTimeout(() => {
+                navigate('/email-verify-admin');
+            }, 3000);
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.error('Error fetching user:', error);
+        }
+    };
+
+    // pega convites de admin
+    const [invitations, setInvitations] = useState([]);
+    const getInvitations = async () => {
+        try {
+            const response = await axios.get(`${Url}/api/inviteAdmin/get-invitation`);
+            if (response.data.success) {
+                setInvitations(response.data.invitation);
+            } else {
+                console.error('Error fetching invitations:', error.response.data.message);
+            }
+        } catch (error) {
+
+            console.error('Error fetching invitations:', error.response.data.message);
+        }
+    };
+
+    // remover convite de admin
+    const removeInvitation = async (id) => {
+        if (!id) {
+            return;
+        }
+        if (!confirm("Tem certeza que deseja remover este convite?")) {
+            return;
+        }
+        try {
+            const response = await axios.delete(`${Url}/api/inviteAdmin/remove-invitation`, { data: { id } });
+            if (response.data.success) {
+                setInvitations(response.data.invitation);
+            }
+            showToast(response.data.message);
+            getInvitations();
+        } catch (error) {
+            showToast(error.response.data.message);
+            console.error('Error fetching invitations:', error);
+        }
+    };
+
+
+
+
 
 
     useEffect(() => {
@@ -421,8 +484,8 @@ export const ContextAppProvider = ({ children }) => {
                 getNewsContent(),
                 getAllUsersToAdmin(),
                 getUser(),
-                checkAuth()
-
+                checkAuth(),
+                getInvitations()
             ]);
         }
         loadData();
@@ -457,7 +520,16 @@ export const ContextAppProvider = ({ children }) => {
         deleteUser,
         user,
         getUser,
-        logoutAdmin
+        logoutAdmin,
+        sendVerificationOtpAdmin,
+        isLogin,
+        // convites admin
+        invitations,
+        getInvitations,
+        removeInvitation,
+        // toast
+        toastMsg,
+        showToast
 
     }
     return (

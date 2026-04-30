@@ -12,9 +12,6 @@ const getUsersAdminData = async (req, res) => {
         if (!user) {
             return res.json({ success: false, message: "User not found" })
         }
-        if (user.role !== "admin") {
-            return res.json({ success: false, message: "User not verified or not exist" })
-        }
         res.status(200).json({
             success: true,
             userAllToAdmin: user.name,
@@ -35,7 +32,7 @@ const updateUserPlan = async (req, res) => {
         if (!userAdmin) {
             return res.status(404).json({ success: false, message: "User not found" })
         }
-        if (!userAdmin.isAccountVerified || userAdmin.role !== "admin") {
+        if (!userAdmin.isAccountVerified) {
             return res.status(403).json({ success: false, message: "User not verified or not exist" })
         }
         if (!id || !plan || !email || !name) {
@@ -76,7 +73,7 @@ const deleteUser = async (req, res) => {
         if (!userAdmin) {
             return res.status(404).json({ success: false, message: "User not found" })
         }
-        if (!userAdmin.isAccountVerified || userAdmin.role !== "admin") {
+        if (!userAdmin.isAccountVerified) {
             return res.status(403).json({ success: false, message: "User not verified or not exist" })
         }
         await userModels.deleteOne({ _id: id });
@@ -97,7 +94,8 @@ const getAllUsersToAdmin = async (req, res) => {
     if (!userAdmin) {
         return res.status(404).json({ success: false, message: "User not found" })
     }
-    if (!userAdmin.isAccountVerified || userAdmin.role !== "admin") {
+
+    if (!userAdmin.isAccountVerified) {
         return res.status(403).json({ success: false, message: "User not verified or not exist" })
     }
     try {

@@ -1,9 +1,12 @@
 import userAdminModels from "../models/userAdminModels.js";
+import authorizationAdminModels from "../models/authorizationAdmin.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import transporter from "../config/nodemailer.js";
-import { EMAIL_WELCOME_TEMPLATE, EMAIL_VERIFY_EMAIL_TEMPLATE, EMAIL_RESET_PASSWORD_TEMPLATE } from "../config/emailTemplates.js";
+import { EMAIL_WELCOME_TEMPLATE, EMAIL_VERIFY_ADMIN_TEMPLATE, RESET_PASSWORD_ADMIN_TEMPLATE } from "../config/emailTemplates.js";
+import { decrypt } from "../utils/crypto.js";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -11,6 +14,7 @@ dotenv.config();
 // register admin
 const registerAdmin = async (req, res) => {
     const { name, email, password } = req.body;
+
     //validar se todos os campos foram preenchidos
     if (!name || !email || !password) {
         return res.status(400).json({ success: false, message: "All fields are required" })
@@ -44,11 +48,21 @@ const registerAdmin = async (req, res) => {
     }
 
     try {
+        //verificar se o usuario é autorizado//
+        const isAuthorized = await authorizationAdminModels.find({});
+        const isAuthorizedEmail = isAuthorized.some(item => {
+            const decryptedEmail = decrypt(item.email);
+            return decryptedEmail === email;
+        });
+        if (!isAuthorizedEmail) {
+            return res.status(400).json({ success: false, message: "User is not authorized" })
+        }
+        //verificar se o usuario existe
         const user = await userAdminModels.findOne({ email });
         if (user) {
             return res.status(400).json({ success: false, message: "User already exists" })
         }
-
+        //gerar senha
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -58,7 +72,7 @@ const registerAdmin = async (req, res) => {
             password: hashedPassword,
             role
         });
-
+        //gerar token
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_ADMIN, { expiresIn: "1d" });
         res.cookie("token", token, {
             httpOnly: true,
@@ -90,6 +104,7 @@ const registerAdmin = async (req, res) => {
 //login admin
 const loginAdmin = async (req, res) => {
     const { email, password } = req.body;
+
     //validar se todos os campos foram preenchidos
     if (!email || !password) {
         return res.status(400).json({ success: false, message: "All fields are required" })
@@ -123,14 +138,24 @@ const loginAdmin = async (req, res) => {
     }
 
     try {
+        //verificar se o usuario é autorizado
+        const isAuthorized = await authorizationAdminModels.find({});
+        const isAuthorizedEmail = isAuthorized.some(item => {
+            const email = decrypt(item.email);
+            return email === email;
+        });
+
+        if (!isAuthorizedEmail) {
+            return res.status(400).json({ success: false, message: "User is not authorized" })
+        }
+        //verificar se o usuario existe
         const user = await userAdminModels.findOne({ email });
         if (!user) {
             return res.status(400).json({ success: false, message: "User not found" })
         }
-        //verificar se o usuario é admin
-        const isAdmin = user.role === "admin";
-        if (!isAdmin) {
-            return res.status(400).json({ success: false, message: "User is not admin" })
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
         }
 
         //comparar senha
@@ -182,9 +207,13 @@ const sendVerifyOtpAdmin = async (req, res) => {
         if (user.isAccountVerified) {
             return res.status(400).json({ success: false, message: "User is already verified" })
         }
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
+        }
 
         //gerar otp
-        const otp = String(Math.floor(1000 + Math.random() * 9000));
+        const otp = String(Math.floor(100000 + Math.random() * 900000));
         user.verifyOtp = otp;
         user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
         await user.save();
@@ -194,7 +223,7 @@ const sendVerifyOtpAdmin = async (req, res) => {
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: "Verify your email",
-            html: EMAIL_VERIFY_EMAIL_TEMPLATE.replace("{{otp}}", otp)
+            html: EMAIL_VERIFY_ADMIN_TEMPLATE.replace("{{otp}}", otp)
         };
         await transporter.sendMail(mailOptions);
         res.status(200).json({ success: true, message: "OTP sent successfully" });
@@ -206,6 +235,7 @@ const sendVerifyOtpAdmin = async (req, res) => {
 // verify email
 const verifyEmailAdmin = async (req, res) => {
     const { otp } = req.body;
+
     const userId = req.userId;
     //validar se todos os campos foram preenchidos
     if (!userId || !otp) {
@@ -215,6 +245,10 @@ const verifyEmailAdmin = async (req, res) => {
         const user = await userAdminModels.findById(userId);
         if (!user) {
             return res.status(400).json({ success: false, message: "User not found" })
+        }
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
         }
         if (user.verifyOtp !== otp || user.verifyOtp === "") {
             return res.status(400).json({ success: false, message: "Invalid OTP" })
@@ -241,8 +275,9 @@ const checkUserAdminAuthenticated = async (req, res) => {
         if (!user) {
             return res.status(400).json({ success: false, message: "User not found" })
         }
-        if (user.role !== "admin") {
-            return res.status(400).json({ success: false, message: "User is not admin" })
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
         }
         res.status(200).json({ success: true, message: "User is authenticated" });
     } catch (error) {
@@ -262,11 +297,13 @@ const sendPasswordOtpAdmin = async (req, res) => {
         if (!user) {
             return res.status(400).json({ success: false, message: "User not found" })
         }
-        if (user.role !== "admin") {
-            return res.status(400).json({ success: false, message: "User is not admin" })
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
         }
+
         //gerar otp
-        const otp = String(Math.floor(1000 + Math.random() * 9000));
+        const otp = String(Math.floor(100000 + Math.random() * 900000));
         user.resetOtp = otp;
         user.resetOtpExpireAt = Date.now() + 15 * 60 * 1000;
         await user.save();
@@ -276,7 +313,7 @@ const sendPasswordOtpAdmin = async (req, res) => {
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: "Forgot password",
-            html: EMAIL_RESET_PASSWORD_TEMPLATE.replace("{{otp}}", otp)
+            html: RESET_PASSWORD_ADMIN_TEMPLATE.replace("{{otp}}", otp)
         };
         await transporter.sendMail(mailOptions);
         res.status(200).json({ success: true, message: "OTP sent successfully" });
@@ -293,15 +330,25 @@ const resetPasswordAdmin = async (req, res) => {
         return res.status(400).json({ success: false, message: "All fields are required" })
     };
 
+
     //validar senha
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(newPassword)) {
         return res.status(400).json({ success: false, message: "Invalid email or password, or weak password." });
     }
+
     try {
         const user = await userAdminModels.findOne({ email });
+        //validar se a senha é diferente da senha antiga
+        if (await bcrypt.compare(newPassword, user.password)) {
+            return res.status(400).json({ success: false, message: "New password must be different from old password" })
+        }
         if (!user) {
             return res.status(400).json({ success: false, message: "User not found" })
+        }
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
         }
         if (Number(!user.resetOtp) || Number(user.resetOtp) !== Number(otp)) {
             return res.status(400).json({ success: false, message: "Incorrect OTP" })
@@ -322,6 +369,7 @@ const resetPasswordAdmin = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
+
 
 
 export { registerAdmin, loginAdmin, logoutAdmin, sendVerifyOtpAdmin, verifyEmailAdmin, checkUserAdminAuthenticated, sendPasswordOtpAdmin, resetPasswordAdmin };

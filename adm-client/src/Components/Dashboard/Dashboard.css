@@ -252,8 +252,10 @@
 .admin-profile p {
     margin: 0;
     font-size: 0.8rem;
-    color: #fffb00b6;
     font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .admin-profile span {

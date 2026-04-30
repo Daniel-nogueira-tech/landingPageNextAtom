@@ -20,6 +20,7 @@
     align-items: center;
     gap: 0.8rem;
     margin-bottom: 2rem;
+    justify-content: space-between;
 }
 
 .settings-icon {
@@ -109,6 +110,11 @@
             rgba(153, 0, 255, 0.938),
             rgba(153, 0, 255, 0.048));
 
+    mask: linear-gradient(to bottom,
+            rgba(153, 0, 255, 0.048),
+            rgba(153, 0, 255, 0.938),
+            rgba(153, 0, 255, 0.048));
+
     -webkit-mask:
         linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
@@ -173,6 +179,39 @@
 .toast-icon {
     color: #10b981;
 }
+
+/* Verificação de email */
+.settings-section-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.settings-section-header-right button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 12px;
+    color: #cacaca;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.8s ease;
+    background: linear-gradient(to right, #8306bdab, #ce65ff93);
+    border: 1px solid #cf70fc93;
+}
+
+.settings-section-header-right button:hover {
+    background: linear-gradient(to right, #a504f0e1, #d165ffc4);
+    border-color: rgba(188, 19, 254, 0.3);
+    color: #fff;
+    transform: scale(1.05);
+}
+
+
+
 
 /* Mobile First Responsiveness */
 @media (max-width: 768px) {

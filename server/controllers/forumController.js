@@ -10,9 +10,7 @@ const getForumData = async (req, res) => {
     if (!user) {
         return res.status(404).json({ success: false, message: "Usuário não encontrado" });
     }
-    if (user.role !== "user") {
-        return res.status(403).json({ success: false, message: "Não autorizado" });
-    }
+
     try {
         const forumData = await forumModels.find({}).sort({ createdAt: -1 });
         if (!forumData || forumData.length === 0) {
@@ -32,7 +30,7 @@ const addForumData = async (req, res) => {
     if (!user) {
         return res.status(404).json({ success: false, message: "Usuário não encontrado" });
     }
-    if (user.role !== "user" || user.isAccountVerified !== true) {
+    if (user.isAccountVerified !== true) {
         return res.status(403).json({ success: false, message: "Não autorizado" });
     }
     try {
@@ -55,7 +53,7 @@ const deleteForumData = async (req, res) => {
     if (!user) {
         return res.status(404).json({ success: false, message: "Usuário não encontrado" });
     }
-    if (user.role !== "user" || user.isAccountVerified !== true) {
+    if (user.isAccountVerified !== true) {
         return res.status(403).json({ success: false, message: "Não autorizado" });
     }
     try {
@@ -83,7 +81,7 @@ const getForumDataAdmin = async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: "Usuário não encontrado" });
         }
-        if (user.role !== "admin" || user.isAccountVerified !== true) {
+        if (user.isAccountVerified !== true) {
             return res.status(403).json({ success: false, message: "Não autorizado" });
         }
         const forumData = await forumModels.find({}).sort({ createdAt: -1 });
@@ -107,7 +105,7 @@ const updateForumDataAdmin = async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: "Usuário não encontrado" });
         }
-        if (user.role !== "admin" || user.isAccountVerified !== true) {
+        if (user.isAccountVerified !== true) {
             return res.status(403).json({ success: false, message: "Não autorizado" });
         }
 
@@ -252,7 +250,7 @@ const deleteCommentAdmin = async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: "Usuário não encontrado" });
         }
-        if (user.role !== "admin" || user.isAccountVerified !== true) {
+        if (user.isAccountVerified !== true) {
             return res.status(403).json({ success: false, message: "Não autorizado" });
         }
 

@@ -30,10 +30,12 @@ const EmailVerify = () => {
     };
 
     const handleKeyDown = (e, index) => {
-        if (e.key === 'ArrowRight') {
+        if (e.key === 'ArrowRight' && index < 5) {
             inputRefs.current[index + 1].focus()
         }
-        if (e.key === 'ArrowLeft') {
+        if (e.key === 'ArrowLeft' && index > 0) {
+            inputRefs.current[index - 1].focus()
+        } else if (e.key === 'Backspace' && !e.target.value && index > 0) {
             inputRefs.current[index - 1].focus()
         }
     };
@@ -60,7 +62,6 @@ const EmailVerify = () => {
                 { otp }
             );
 
-            console.log(data);
 
             if (data.success) {
                 getUserData();

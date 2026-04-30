@@ -17,25 +17,24 @@
 
 }
 
-.btn-primary span p {
-    position: absolute;
-    top: 125%;
+.user-profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-profile-container p {
     font-size: 10px;
-    background-color: var(--glass-bg);
-    padding: 2px;
-    border-radius: 10px;
-    border: 1px solid var(--text-muted);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100px;
     text-align: center;
     text-transform: capitalize;
 }
 
+
+
 .btn-primary span svg {
     border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    padding: 2px;
+
     background-color: var(--glass-bg);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 10px rgba(245, 245, 245, 0.2);
@@ -246,33 +245,14 @@
     .mobile-toggle {
         display: block;
     }
-
-    .user-profile-dropdown {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        left: -60%;
-        right: 0;
-    }
-
-    .btn-primary span p {
-        top: 90%;
-        margin-top: 5px;
-    }
-
-
 }
 
 @media (max-width: 1024px) {
     .check-email {
-        top: 70%;
+        top: 80%;
     }
 
     .user-profile-dropdown {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        left: -60%;
-        right: 0;
+        left: 10%;
     }
 }

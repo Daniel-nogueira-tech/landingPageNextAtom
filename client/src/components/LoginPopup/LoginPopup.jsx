@@ -13,12 +13,6 @@ import axios from 'axios';
 import { Toast } from 'primereact/toast';
 
 
-
-
-
-
-
-
 const LoginPopup = () => {
     const { setIsLoginPopupOpen, backendUrl, setIsLoading, getUserData, setIsLogin } = React.useContext(PageContext);
     const messages = useRef(null);
@@ -33,10 +27,6 @@ const LoginPopup = () => {
     });
 
     const toast = useRef(null);
-
-
-
-
 
     const onChangeHandler = (e) => {
         const name = e.target.name;

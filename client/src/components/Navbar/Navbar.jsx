@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Navbar.css';
-import { Menu, X, Atom, UserRound, LogOut, Mail, Check, OctagonAlert } from 'lucide-react';
+import { Menu, X, UserRound, LogOut, Check, OctagonAlert } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PageContext } from '../../Contexts/PageContext';
 import axios from 'axios';
@@ -96,10 +96,9 @@ const Navbar = () => {
 
                     {userData ? (
                         <div className='user-profile-container'>
-                            <span className='check-email'>{userData?.userData?.isAccountVerified ? <Check /> : <OctagonAlert className='alert-verify-email' />}</span>
                             <div className="btn-primary" id='user-profile' >
-
-                                <span> <UserRound size={28} /> <p>{lastTwoNames || ""}</p></span>
+                                <span className='check-email'>{userData?.userData?.isAccountVerified ? <Check /> : <OctagonAlert className='alert-verify-email' />}</span>
+                                <span> <UserRound size={28} /></span>
                                 {/**Menu dropdown */}
                                 <ul className='user-profile-dropdown'>
                                     <li><UserRound size={28} />Perfil</li>
@@ -111,6 +110,7 @@ const Navbar = () => {
                                             Verificar email</li>}
                                 </ul>
                             </div>
+                            <p>{lastTwoNames || ""}</p>
                         </div>
                     ) : (
                         <button className="btn-primary" onClick={() => setIsLoginPopupOpen(true)}>Entrar</button>
@@ -141,10 +141,9 @@ const Navbar = () => {
                             <li>
                                 {userData ? (
                                     <>
-                                        <span className='check-email'>{userData?.userData?.isAccountVerified ? <Check /> : null}</span>
                                         <div className="btn-primary" id='user-profile' >
+                                            <span> <UserRound size={28} /> </span>
 
-                                            <span> <UserRound size={28} /> <p>{userData?.userData?.name || ""}</p></span>
                                             {/**Menu dropdown */}
                                             <ul className='user-profile-dropdown'>
                                                 <li><UserRound size={28} />Perfil</li>
@@ -155,7 +154,9 @@ const Navbar = () => {
                                                     ><OctagonAlert size={38} />
                                                         Verificar email</li>}
                                             </ul>
+                                            <p>{userData?.userData?.name || ""}</p>
                                         </div>
+
                                     </>
                                 ) : (
                                     <button className="btn-primary" onClick={() => setIsLoginPopupOpen(true)}>Entrar</button>

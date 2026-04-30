@@ -1,0 +1,137 @@
+.reset-password-container-verify {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #0f0f17 0%, #1a1a2e 100%);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.reset-password-card-verify {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(174, 0, 255, 0.178);
+    animation: slideUp 0.6s ease-out;
+}
+
+.reset-password-header-verify {
+    margin-bottom: 30px;
+}
+
+.reset-password-header-verify h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.reset-password-card-verify p {
+    color: #a1a1aa;
+    margin-bottom: 20px;
+}
+
+.otp-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.otp-container input {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.otp-container input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.reset-password-card-verify button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #7700ffce 0%, #cb5bff 100%);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border: 1px solid #d0a8ff;
+    transition: all 0.3s ease;
+}
+
+.reset-password-card-verify button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(111, 0, 255, 0.3);
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    color: #a1a1aa;
+    transition: all 0.3s ease;
+    width: fit-content;
+    background-color: #00000060;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    border: 1px solid #6f00ff7a;
+}
+
+.back-btn:hover {
+    color: #6f00ff;
+    scale: 1.1;
+    background-color: #00000030;
+    border: 1px solid #6f00ff;
+}
+
+.back-btn span {
+    font-size: 20px;
+}
+
+@media (max-width: 768px) {
+    .reset-password-container-verify {
+        padding: 10px;
+    }
+
+    .reset-password-card-verify {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    .reset-password-header-verify h1 {
+        font-size: 24px;
+    }
+
+    .otp-container {
+        gap: 8px;
+    }
+
+    .otp-container input {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+
+    .reset-password-card-verify button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}

@@ -122,8 +122,8 @@ const Dashboard = () => {
                 <header className="main-header">
                     <h1>Visão Geral</h1>
                     <div className="admin-profile">
-                        {user?.isAccountVerified && <ShieldCheck size={20} color="#fffb0094" />}
-                        <p>Admin:</p><span>{getFirstTwoNames(user?.userAllToAdmin)}</span>
+                        {user?.isAccountVerified && <p> <ShieldCheck size={20} color="#fffb07ff" />Admin:</p>}
+                        <span>{getFirstTwoNames(user?.userAllToAdmin)}</span>
                         <div className="avatar">{user?.userAllToAdmin?.charAt(0).toUpperCase()}</div>
                     </div>
                 </header>

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import userModels from "../models/userModels.js";
 import transporter from "../config/nodemailer.js";
+import mongoose from "mongoose";
 import { EMAIL_WELCOME_TEMPLATE, EMAIL_VERIFY_EMAIL_TEMPLATE, EMAIL_RESET_PASSWORD_TEMPLATE } from "../config/emailTemplates.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -51,8 +52,8 @@ const registerUser = async (req, res) => {
         if (userExists) {
             return res.status(400).json({ success: false, message: "User already exists" })
         }
-        //definir role como admin
-        const role = process.env.ROLE_USER;
+        //definir role como user
+        const role = 'user';
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -124,6 +125,10 @@ const loginUser = async (req, res) => {
         if (!user) {
             return res.status(400).json({ success: false, message: "Incorrect username or password." })
         }
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
+        }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ success: false, message: "Incorrect username or password." })
@@ -149,6 +154,10 @@ const logoutUser = async (req, res) => {
     if (!token) {
         return res.status(400).json({ success: false, message: "User is not logged in" })
     }
+    //validar se o token é valido
+    if (!jwt.verify(token, process.env.JWT_SECRET)) {
+        return res.status(400).json({ success: false, message: "Invalid token" })
+    }
     try {
         res.clearCookie("token", {
             httpOnly: true,
@@ -169,6 +178,10 @@ const sendVerifyOtp = async (req, res) => {
 
         if (user.isAccountVerified) {
             return res.status(400).json({ success: false, message: "Account already verified" })
+        }
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
         }
 
         const otp = String(Math.floor(100000 + Math.random() * 900000));
@@ -204,6 +217,10 @@ const verifyEmail = async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
+        }
 
         if (!user.verifyOtp) {
             return res.status(400).json({ success: false, message: "No OTP found" });
@@ -237,7 +254,11 @@ const checkAuth = async (req, res) => {
         if (!user) {
             return res.status(400).json({ success: false, message: "User not found" })
         }
-        if (user.role !== process.env.ROLE_USER) {
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
+        }
+        if (user.role !== 'user') {
             return res.status(400).json({ success: false, message: "User is not user" })
         }
         res.status(200).json({ success: true, user });
@@ -255,7 +276,11 @@ const sendResetOtp = async (req, res) => {
     try {
         const user = await userModels.findOne({ email });
         if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" })
+            return res.status(404).json({ success: false, message: "User not found or invalid email" })
+        }
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
         }
         const otp = String(Math.floor(100000 + Math.random() * 900000));
 
@@ -289,6 +314,10 @@ const resetPassword = async (req, res) => {
         const user = await userModels.findOne({ email });
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" })
+        }
+        //validar se o id é valido
+        if (!mongoose.Types.ObjectId.isValid(user._id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" })
         }
         if (Number(!user.resetOtp) || Number(user.resetOtp) !== Number(otp)) {
             return res.status(400).json({ success: false, message: "Incorrect OTP" })

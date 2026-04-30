@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Sidebar from '../Sidebar/Sidebar';
 import './Settings.css';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trash2, Send, Shield, CheckCircle } from 'lucide-react';
-
-const initialTeam = [
-    { id: 1, email: 'suporte@crypto.io', date: '10/04/2026' },
-    { id: 2, email: 'moderador@crypto.io', date: '12/04/2026' }
-];
+import { Trash2, Send, Shield, CheckCircle, ShieldCheck } from 'lucide-react';
+import { ContextApp } from '../../Context/ContextApp';
+import axios from 'axios';
 
 const Settings = () => {
-    const [team, setTeam] = useState(initialTeam);
+    const { sendVerificationOtpAdmin, user, Url, invitations, getInvitations, removeInvitation, toastMsg, showToast } = useContext(ContextApp);
+
+
+    const [team, setTeam] = useState(invitations);
     const [inviteEmail, setInviteEmail] = useState('');
-    const [toastMsg, setToastMsg] = useState(null);
 
     // Basic Validation: must include @ and .com
     const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
@@ -20,29 +19,31 @@ const Settings = () => {
     const includesRequiredChars = inviteEmail.includes('@') && inviteEmail.includes('.com');
     const isValid = emailRegex.test(inviteEmail) && includesRequiredChars;
 
-    const showToast = (msg) => {
-        setToastMsg(msg);
-        setTimeout(() => setToastMsg(null), 3000);
-    };
 
-    const handleInvite = (e) => {
+    const handleInvite = async (e) => {
         e.preventDefault();
         if (isValid) {
-            const newMember = {
-                id: Date.now(),
-                email: inviteEmail,
-                date: new Date().toLocaleDateString('pt-BR')
-            };
-            setTeam([newMember, ...team]);
-            setInviteEmail('');
-            showToast("Convite enviado com sucesso!");
+            try {
+                const response = await axios.post(`${Url}/api/inviteAdmin/invite-admin`, { email: inviteEmail });
+                if (response.data.success) {
+                    setInviteEmail('');
+                    showToast(response.data.message);
+                }
+                getInvitations();
+            } catch (error) {
+                showToast(error.response.data.message);
+            }
+        } else {
+            showToast("Email inválido!");
         }
     };
 
-    const handleRemove = (id) => {
-        setTeam(team.filter(member => member.id !== id));
-        showToast("Acesso removido com sucesso!");
-    };
+
+    useEffect(() => {
+        getInvitations();
+    }, []);
+
+
 
     return (
         <div className="admin-dashboard-container">
@@ -58,12 +59,26 @@ const Settings = () => {
                 </header>
 
                 <section className="settings-section glass-panel">
-                    <div className="settings-section-header">
-                        <Shield className="settings-icon" size={24} />
-                        <h2>Gestão de Equipe</h2>
+                    <div className="settings-section-header" >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                            <Shield className="settings-icon" size={24} />
+                            <h2>Gestão de Equipe</h2>
+                        </div>
+                        {!user?.isAccountVerified ? (
+                            <div className="settings-section-header-right">
+                                Verificação de email
+                                <button onClick={sendVerificationOtpAdmin}>Verificar</button>
+                            </div>
+                        ) : (
+                            <div className="settings-section-header-right">
+                                <ShieldCheck size={20} color="#fffb07ff" /> Conta verificada
+                            </div>
+                        )}
                     </div>
 
-                    <form className="invite-form" onSubmit={handleInvite}>
+
+
+                    {<form className="invite-form" onSubmit={handleInvite}>
                         <div className="invite-input-group">
                             <input
                                 type="email"
@@ -79,14 +94,14 @@ const Settings = () => {
                                 <Send size={18} /> Convidar
                             </button>
                         </div>
-                    </form>
+                    </form>}
 
                     <div className="team-list">
                         <AnimatePresence>
-                            {team.map((member) => (
+                            {invitations?.map((member) => (
                                 <motion.div
                                     className="team-member-card"
-                                    key={member.id}
+                                    key={member._id}
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, x: -20 }}
@@ -94,11 +109,11 @@ const Settings = () => {
                                 >
                                     <div className="member-info">
                                         <h4>{member.email}</h4>
-                                        <span>Autorizado em: {member.date}</span>
+                                        <span>Autorizado em: {member.createdAt}</span>
                                     </div>
                                     <button
                                         className="btn-icon btn-delete"
-                                        onClick={() => handleRemove(member.id)}
+                                        onClick={() => removeInvitation(member._id)}
                                         title="Remover Acesso"
                                     >
                                         <Trash2 size={20} />
@@ -106,11 +121,12 @@ const Settings = () => {
                                 </motion.div>
                             ))}
                         </AnimatePresence>
-                        {team.length === 0 && (
+                        {invitations?.length === 0 && (
                             <p className="no-members-msg">Nenhum colaborador autorizado no momento.</p>
                         )}
                     </div>
                 </section>
+
 
                 {/* Framer Motion Toast */}
                 <AnimatePresence>
