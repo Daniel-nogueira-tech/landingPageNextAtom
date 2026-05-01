@@ -3,13 +3,25 @@ import { getForumData, addForumData, deleteForumData, getForumDataAdmin, updateF
 import userAdminAuth from "../middleware/userAdminMiddleware.js";
 import userAuth from "../middleware/userMiddleware.js";
 import { accessControlMiddleware } from "../middleware/accessControlMiddleware.js";
+import multer from "multer";
+
+
 
 const router = express.Router();
+// Funções de upload de imagem
+const storage = multer.diskStorage({
+    destination: "uploads",
+    filename: (req, file, cb) => {
+        return cb(null, `${Date.now()}_${file.originalname}`)
+    }
+});
+
+const upload = multer({ storage });
 
 // Rotas públicas user
-router.get("/get-forum", userAuth, accessControlMiddleware(["admin", "super-admin"]), getForumData);
-router.post("/add-forum", userAuth, accessControlMiddleware(["admin", "super-admin"]), addForumData);
-router.delete("/delete-forum", userAuth, accessControlMiddleware(["admin", "super-admin"]), deleteForumData);
+router.get("/get-forum", userAuth, getForumData);
+router.post("/add-forum", upload.single("image"), userAuth, addForumData);
+router.delete("/delete-forum", userAuth, deleteForumData);
 
 // Rotas privadas admin
 router.get("/get-forum-management", userAdminAuth, accessControlMiddleware(["admin", "super-admin"]), getForumDataAdmin);

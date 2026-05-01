@@ -1,5 +1,5 @@
 import NewsContent from "../models/newsContentModel.js";
-
+import mongoose from "mongoose";
 
 // pega todas as noticias
 const getNewsContent = async (req, res) => {
@@ -34,6 +34,9 @@ const updateNewsContent = async (req, res) => {
         if (!id) {
             return res.status(400).json({ success: false, message: "ID é obrigatório!" });
         }
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: "ID inválido!" });
+        }
 
         const newsContent = await NewsContent.findByIdAndUpdate(id, { $set: data }, { returnDocument: 'after', runValidators: true });
         if (!newsContent) {
@@ -51,6 +54,9 @@ const deleteNewsContent = async (req, res) => {
         const { id } = req.body;
         if (!id) {
             return res.status(400).json({ success: false, message: "ID é obrigatório!" });
+        }
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: "ID inválido!" });
         }
         const newsContent = await NewsContent.findByIdAndDelete(id);
         if (!newsContent) {

@@ -1,10 +1,61 @@
 import forumModels from "../models/forumModels.js";
 import userAdminModels from "../models/userAdminModels.js";
 import userModels from "../models/userModels.js";
+import mongoose from "mongoose";
+import fs from "fs";
+import path from "path";
+
+const __dirname = path.resolve();
+
+
+//---------------------/User/Forum/---------------------//
+// add forum data
+const addForumData = async (req, res) => {
+    const userId = req.userId;
+
+    if (!userId) {
+        return res.status(401).json({ success: false, message: "Usuário não autenticado" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ success: false, message: "ID inválido!" });
+    }
+
+    const user = await userModels.findById(userId, "role isAccountVerified");
+    if (!user) {
+        return res.status(404).json({ success: false, message: "Usuário não encontrado" });
+    }
+    if (user.isAccountVerified !== true) {
+        return res.status(403).json({ success: false, message: "Não autorizado" });
+    }
+
+    try {
+        let image_url = "";
+        if (req.file) {
+            image_url = await saveImage(req.file);
+        } else {
+            image_url = "default.jpg";
+        }
+        const { title, content, author, category, tags, comments, isVerified, views, isPinned } = req.body;
+
+        const forumData = new forumModels({ title, content, author, category, tags, comments, imageUrl: image_url, isVerified, views, isPinned });
+
+        await forumData.save();
+        res.status(200).json({ success: true, message: "Fórum adicionado com sucesso" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Internal server error", error });
+    }
+};
 
 // get forum data
 const getForumData = async (req, res) => {
     const userId = req.userId;
+
+    if (!userId) {
+        return res.status(401).json({ success: false, message: "Usuário não autenticado" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ success: false, message: "ID inválido!" });
+    }
 
     const user = await userModels.findById(userId, "role");
     if (!user) {
@@ -22,32 +73,16 @@ const getForumData = async (req, res) => {
     }
 };
 
-// add forum data
-const addForumData = async (req, res) => {
-    const userId = req.userId;
-
-    const user = await userModels.findById(userId, "role isAccountVerified");
-    if (!user) {
-        return res.status(404).json({ success: false, message: "Usuário não encontrado" });
-    }
-    if (user.isAccountVerified !== true) {
-        return res.status(403).json({ success: false, message: "Não autorizado" });
-    }
-    try {
-        const { title, content, author, category, tags, comments, imageUrl, isVerified, views, isPinned } = req.body;
-
-        const forumData = new forumModels({ title, content, author, category, tags, comments, imageUrl, isVerified, views, isPinned });
-
-        await forumData.save();
-        res.status(200).json({ success: true, message: "Fórum adicionado com sucesso" });
-    } catch (error) {
-        res.status(500).json({ success: false, message: "Internal server error", error });
-    }
-};
-
 // delete forum data
 const deleteForumData = async (req, res) => {
     const userId = req.userId;
+
+    if (!userId) {
+        return res.status(401).json({ success: false, message: "Usuário não autenticado" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ success: false, message: "ID inválido!" });
+    }
 
     const user = await userModels.findById(userId, "role isAccountVerified");
     if (!user) {
@@ -77,6 +112,13 @@ const getForumDataAdmin = async (req, res) => {
     try {
         const userId = req.userId;
 
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "Usuário não autenticado" });
+        }
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ success: false, message: "ID inválido!" });
+        }
+
         const user = await userAdminModels.findById(userId, "role isAccountVerified");
         if (!user) {
             return res.status(404).json({ success: false, message: "Usuário não encontrado" });
@@ -100,6 +142,13 @@ const updateForumDataAdmin = async (req, res) => {
     try {
         const { id, isVerified, isPinned } = req.body;
         const userId = req.userId;
+
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "Usuário não autenticado" });
+        }
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ success: false, message: "ID inválido!" });
+        }
 
         const user = await userAdminModels.findById(userId, "role isAccountVerified");
         if (!user) {
@@ -140,6 +189,7 @@ const updateForumDataAdmin = async (req, res) => {
 const addReplyAdmin = async (req, res) => {
     try {
         const { postId, commentId, replyId, author, content, date, isAdmin } = req.body;
+
 
         if (!postId) {
             return res.status(400).json({
@@ -245,6 +295,13 @@ const deleteCommentAdmin = async (req, res) => {
     try {
         const { postId, commentId, replyId, replyReplyId } = req.body;
         const userId = req.userId;
+
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "Usuário não autenticado" });
+        }
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ success: false, message: "ID inválido!" });
+        }
 
         const user = await userAdminModels.findById(userId, "role isAccountVerified");
         if (!user) {

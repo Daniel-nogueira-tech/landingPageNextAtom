@@ -1,4 +1,5 @@
 import LearningContent from "../models/LearningContentModels.js";
+import mongoose from "mongoose";
 
 // pega todos os conteudos
 const getLearningContent = async (req, res) => {
@@ -33,7 +34,9 @@ const updateLearningContent = async (req, res) => {
         if (!id) {
             return res.status(400).json({ success: false, message: "ID é obrigatório!" });
         }
-
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: "ID inválido!" });
+        }
         const learningContent = await LearningContent.findByIdAndUpdate(id, { $set: data }, { returnDocument: 'after', runValidators: true });
         if (!learningContent) {
             return res.status(404).json({ success: false, message: "Conteúdo não encontrado!" });
@@ -50,6 +53,9 @@ const deleteLearningContent = async (req, res) => {
         const { id } = req.body;
         if (!id) {
             return res.status(400).json({ success: false, message: "ID é obrigatório!" });
+        }
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: "ID inválido!" });
         }
         const learningContent = await LearningContent.findByIdAndDelete(id);
         if (!learningContent) {

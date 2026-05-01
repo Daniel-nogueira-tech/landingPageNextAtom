@@ -12,6 +12,7 @@ import Settings from './Components/Settings/Settings'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
 import EmailVefify from './Components/EmailVefify/EmailVefify'
 import InvitationAdmin from './Components/InvitationAdmin/InvitationAdmin'
+import ManageUserAdmin from './Components/ManageUserAdmin/ManageUserAdmin'
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -45,6 +46,7 @@ function App() {
         <Route path="/forgot-password" element={<ResetPassword />} />
         <Route path="/email-verify-admin" element={<EmailVefify />} />
         <Route path="/invitation-admin" element={<InvitationAdmin />} />
+        <Route path="/manage-users-admin" element={<ManageUserAdmin />} />
 
         <Route path="/login" element={<LoginPage />} />
       </Routes>

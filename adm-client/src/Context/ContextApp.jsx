@@ -339,7 +339,6 @@ export const ContextAppProvider = ({ children }) => {
         }
     };
 
-
     // editar usuario
     const editUserPlan = async (id, plan, email, name) => {
         if (!id) {
@@ -384,6 +383,66 @@ export const ContextAppProvider = ({ children }) => {
             console.error('Error fetching all users:', error);
         }
     };
+
+    //--------------------------/gestão de admin/--------------------------/
+    // pegar todos os usuarios admins
+    const [allUserAdmins, setAllUserAdmins] = useState([]);
+    const getAllUserAdmins = async () => {
+        try {
+            const response = await axios.get(`${Url}/api/userAdmin/getAllUserAdminsData`);
+            if (response.data.success) {
+                setAllUserAdmins(response.data.userAll);
+            }
+        } catch (error) {
+            console.error('Error fetching all user admins:', error.response?.data?.message);
+        }
+    };
+    // edit admin
+    const editUserAdmin = async (id, name, email, role) => {
+        if (!id) {
+            return;
+        }
+        console.log(id, name, email, role);
+        const payload = {
+            id: id,
+            name: name,
+            email: email,
+            role: role,
+        };
+        try {
+            const response = await axios.put(`${Url}/api/userAdmin/update-user-admin`, payload);
+            if (response.data.success) {
+                setAllUserAdmins(response.data.userAl);
+            }
+            toast.success(response.data.message);
+            getAllUserAdmins();
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.error('Error fetching all user admins:', error);
+        }
+    };
+
+    // delete admin
+    const deleteUserAdmin = async (id) => {
+        if (!id) {
+            return;
+        }
+        if (!confirm("Tem certeza que deseja remover este admin?")) {
+            return;
+        }
+        try {
+            const response = await axios.delete(`${Url}/api/userAdmin/delete-user-admin`, { data: { id } });
+            if (response.data.success) {
+                setAllUserAdmins(response.data.userAllToAdmin);
+            }
+            toast.success(response.data.message);
+            getAllUserAdmins();
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.error('Error fetching all user admins:', error);
+        }
+    };
+
 
     // pegar usuario logado
     const [user, setUser] = useState(null);
@@ -473,9 +532,6 @@ export const ContextAppProvider = ({ children }) => {
 
 
 
-
-
-
     useEffect(() => {
         async function loadData() {
             await Promise.all([
@@ -485,7 +541,8 @@ export const ContextAppProvider = ({ children }) => {
                 getAllUsersToAdmin(),
                 getUser(),
                 checkAuth(),
-                getInvitations()
+                getInvitations(),
+                getAllUserAdmins()
             ]);
         }
         loadData();
@@ -529,7 +586,11 @@ export const ContextAppProvider = ({ children }) => {
         removeInvitation,
         // toast
         toastMsg,
-        showToast
+        showToast,
+        allUserAdmins,
+        getAllUserAdmins,
+        editUserAdmin,
+        deleteUserAdmin
 
     }
     return (

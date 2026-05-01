@@ -76,6 +76,11 @@ const Sidebar = () => {
                             <FaUser className="nav-icon" /> Gerenciar Usuários
                         </li>
                     </Link>
+                    <Link to="/manage-users-admin" style={{ textDecoration: 'none' }} className={isActive('/manage-users-admin')} onClick={closeSidebarMobile}>
+                        <li className="nav-item">
+                            <FaUser className="nav-icon" /> Gerenciar Admin
+                        </li>
+                    </Link>
                 </ul>
             </nav>
 
