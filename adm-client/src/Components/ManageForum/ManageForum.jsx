@@ -21,10 +21,10 @@ const ManageForum = () => {
         getForumContent();
     }, []);
 
-    // função para pegar apenas o primeiro nome do usuário
+    // função para pegar apenas o segundo e primeiro nome do usuário
     const getFirstName = (name) => {
         if (!name) return '';
-        return name.split(' ')[0];
+        return name.split(' ')[0] + " " + name.split(' ')[1];
     };
 
     // toggle para expandir e recolher post

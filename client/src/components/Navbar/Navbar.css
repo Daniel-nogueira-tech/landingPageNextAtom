@@ -34,10 +34,10 @@
 
 .btn-primary span svg {
     border-radius: 50%;
-
     background-color: var(--glass-bg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 10px rgba(245, 245, 245, 0.2);
+    object-fit: cover;
+    display: block;
+    border: 1px solid var(--glass-border);
 }
 
 #user-profile {

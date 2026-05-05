@@ -1,5 +1,5 @@
 import express from "express";
-import { getForumData, addForumData, deleteForumData, getForumDataAdmin, updateForumDataAdmin, deleteCommentAdmin, addReplyAdmin } from "../controllers/forumController.js";
+import { getForumData, addForumData, deleteForumData, getForumDataAdmin, updateForumDataAdmin, deleteCommentAdmin, addReplyAdmin, addReplyUser, updateVotes } from "../controllers/forumController.js";
 import userAdminAuth from "../middleware/userAdminMiddleware.js";
 import userAuth from "../middleware/userMiddleware.js";
 import { accessControlMiddleware } from "../middleware/accessControlMiddleware.js";
@@ -20,8 +20,10 @@ const upload = multer({ storage });
 
 // Rotas públicas user
 router.get("/get-forum", userAuth, getForumData);
-router.post("/add-forum", upload.single("image"), userAuth, addForumData);
+router.post("/add-forum", upload.single("imageUrl"), userAuth, addForumData);
+router.post("/update-votes", userAuth, updateVotes);
 router.delete("/delete-forum", userAuth, deleteForumData);
+router.post("/add-reply-user", userAuth, addReplyUser);
 
 // Rotas privadas admin
 router.get("/get-forum-management", userAdminAuth, accessControlMiddleware(["admin", "super-admin"]), getForumDataAdmin);

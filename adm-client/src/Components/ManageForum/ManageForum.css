@@ -227,11 +227,10 @@
 }
 
 .admin-badge {
-    background: linear-gradient(135deg, #d4af37, #f3e5ab);
-    /* Gold */
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    padding: 1px 8px;
+    background-color: rgba(9, 255, 0, 0.171);
+    border-radius: 5px;
+    color: rgb(49, 255, 31);
     font-size: 0.75rem;
     font-weight: 700;
     display: flex;
@@ -240,7 +239,7 @@
 }
 
 .admin-badge svg {
-    color: #d4af37;
+    color: #31ff3c;
 }
 
 .text-muted {

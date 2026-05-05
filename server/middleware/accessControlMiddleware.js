@@ -11,7 +11,6 @@ export const accessControlMiddleware = (allowedRoles = []) => {
                 return res.status(401).json({ success: false, message: "unauthorized" });
             }
 
-
             const decoded = jwt.verify(token, process.env.JWT_SECRET_ADMIN);
 
             const id = new mongoose.Types.ObjectId(decoded.id);

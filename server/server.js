@@ -12,6 +12,9 @@ import forumRoutes from "./routes/forumRoutes.js";
 import routerAdmin from "./routes/userRouterAdmin.js";
 import authAdminRoute from "./routes/authAdminRoutes.js";
 import inviteRouter from "./routes/authorizationAdminRoutes.js";
+import path from "path";
+
+
 
 dotenv.config();
 
@@ -44,6 +47,12 @@ app.use("/api/inviteAdmin", inviteRouter);
 app.use("/api/learning-content", learningContentRoutes);
 app.use("/api/news-content", newsContentRoutes);
 app.use("/api/forum", forumRoutes);
+
+// Serve arquivos estáticos da pasta 'uploads'
+app.use("/uploads", express.static(path.resolve("uploads")));
+
+
+
 
 app.listen(port, () => {
     console.log(`Server running on port http://localhost:${port}`);

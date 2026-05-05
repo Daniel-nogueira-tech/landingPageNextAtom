@@ -38,7 +38,14 @@ const forumSchema = new mongoose.Schema({
     tags: { type: [String], default: [] },
     upvotes: { type: Number, default: 0 },
     downvotes: { type: Number, default: 0 },
-
+    votes: {
+        type: Map,
+        of: {
+            type: String,
+            enum: ["upvote", "downvote"]
+        },
+        default: {},
+    },
     //  agora usa commentSchema
     comments: [commentSchema],
 
